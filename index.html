@@ -232,7 +232,6 @@
             }
             .nav-links.active { right: 0; box-shadow: -10px 0 50px rgba(0,0,0,0.8); }
             .nav-links a { font-size: 1.5rem; margin: 20px 0; display: block; }
-            .close-menu { display: block; position: absolute; top: 30px; right: 30px; font-size: 2rem; color: var(--primary); cursor: pointer; }
             
             /* Boşluklar ve Tipografi */
             .section-padding { padding: 50px 5%; }
@@ -263,29 +262,24 @@
 </head>
 <body>
 
-    <!-- YÜKLEME EKRANI -->
     <div id="preloader">
         <i class="fas fa-dumbbell"></i>
         <h2>GYM OF LEGENDS</h2>
     </div>
 
-    <!-- ÖZEL İMLEÇ -->
     <div class="cursor-dot"></div>
     <div class="cursor-outline"></div>
 
-    <!-- YÜZEN İKONLAR -->
     <a href="https://www.instagram.com/gymoflegendsserikk/" class="ig-float" target="_blank"><i class="fab fa-instagram"></i></a>
     <a href="https://wa.me/905321361240?text=Merhaba,%20Gym%20of%20Legends%20salonunuz%20ve%20üyelikler%20hakkında%20bilgi%20almak%20istiyorum." class="wp-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
 
     <div id="scroll-progress"></div>
 
-    <!-- HEADER & MOBİL MENÜ -->
     <header id="main-header">
         <nav>
             <div class="logo">GYM OF <span>LEGENDS</span></div>
             <div class="hamburger" id="hamburger-btn"><i class="fas fa-bars"></i></div>
             <div class="nav-links" id="nav-links">
-                <div class="close-menu" id="close-btn"><i class="fas fa-times"></i></div>
                 <a href="#arena">SALON</a>
                 <a href="#pricing">ÜYELİK</a>
                  <a href="#kitle">VÜCUT KİTLE İNDEKSİ   </a>
@@ -294,7 +288,6 @@
         </nav>
     </header>
 
-    <!-- HERO BÖLÜMÜ -->
     <div class="hero">
         <video autoplay loop muted playsinline class="hero-video" id="heroVideo">
             <source src="video4.mp4" type="video/mp4">
@@ -306,14 +299,12 @@
         </div>
     </div>
 
-    <!-- İSTATİSTİKLER -->
     <div class="stats-container" data-aos="fade-up">
         <div class="stat-item"><i class="fas fa-users"></i><h3>500+</h3><p>Aktif Üye</p></div>
         <div class="stat-item"><i class="fas fa-dumbbell"></i><h3>Pro</h3><p>Kapsamlı Ekipman</p></div>
         <div class="stat-item"><i class="fas fa-medal"></i><h3>2018</h3><p>Kuruluş Yılı</p></div>
     </div>
 
-    <!-- KAYAN TİPOGRAFİ BANDI -->
     <div class="marquee-container" data-aos="fade-up">
         <div class="marquee-content">
             <span>GYM OF LEGENDS <i class="fas fa-bolt"></i> NO EXCUSES <i class="fas fa-bolt"></i> TRAIN HARD <i class="fas fa-bolt"></i> SERİK'İN ZİRVESİ <i class="fas fa-bolt"></i></span>
@@ -322,7 +313,6 @@
         </div>
     </div>
 
-    <!-- GALERİ -->
     <section id="arena" class="section-padding">
         <div class="section-header" data-aos="fade-up">
             <h2 class="matrix-text">SALONUMUZ</h2>
@@ -350,7 +340,6 @@
         </div>
     </section>
 
-    <!-- HİZMETLER -->
     <section class="section-padding features">
         <div class="feature-grid">
             <div class="f-card" data-aos="fade-up"><i class="fas fa-dumbbell"></i><h3>PRO EKİPMAN</h3><p>Serik'in en kapsamlı ağırlık parkuru.</p></div>
@@ -359,7 +348,6 @@
         </div>
     </section>
 
-    <!-- BMI HESAPLAYICI -->
     <section id="kitle" class="section-padding">
         <div class="section-header" data-aos="fade-up">
             <h2 class="matrix-text">VÜCUT KİTLE İNDEKSİ</h2>
@@ -382,7 +370,6 @@
         </div>
     </section>
 
-    <!-- FİYATLANDIRMA -->
     <section id="pricing" class="section-padding">
         <div class="section-header" data-aos="fade-up">
             <h2 class="matrix-text">ÜYELİK PAKETLERİ</h2>
@@ -411,7 +398,6 @@
         </div>
     </section>
 
-    <!-- SSS -->
     <section id="faq" class="section-padding">
         <div class="section-header" data-aos="fade-up"><h2 class="matrix-text">SIKÇA SORULANLAR</h2><div class="line"></div></div>
         <div class="faq-section" data-aos="fade-up">
@@ -421,7 +407,6 @@
         </div>
     </section>
 
-    <!-- FOOTER -->
     <footer>
         <div class="footer-content">
             <div>
@@ -446,7 +431,6 @@
         </div>
     </footer>
 
-    <!-- LIGHTBOX -->
     <div id="lightbox" class="lightbox">
         <span class="close-lb" onclick="closeLightbox()">×</span>
         <img class="lightbox-content" id="lightbox-img">
@@ -465,15 +449,34 @@
 
         // MOBİL MENÜ (HAMBURGER) KONTROLÜ
         const hamburgerBtn = document.getElementById('hamburger-btn');
-        const closeBtn = document.getElementById('close-btn');
         const navLinks = document.getElementById('nav-links');
+        const hamburgerIcon = hamburgerBtn.querySelector('i');
         
-        hamburgerBtn.addEventListener('click', () => { navLinks.classList.add('active'); });
-        closeBtn.addEventListener('click', () => { navLinks.classList.remove('active'); });
+        function toggleMenu() {
+            navLinks.classList.toggle('active');
+            
+            // Menü açıksa çarpı yap ve döndür, kapalıysa 3 çizgi yap
+            if(navLinks.classList.contains('active')) {
+                hamburgerIcon.classList.remove('fa-bars');
+                hamburgerIcon.classList.add('fa-times');
+                hamburgerBtn.style.transform = 'rotate(90deg)'; 
+            } else {
+                hamburgerIcon.classList.remove('fa-times');
+                hamburgerIcon.classList.add('fa-bars');
+                hamburgerBtn.style.transform = 'rotate(0deg)'; 
+            }
+        }
+
+        hamburgerBtn.addEventListener('click', toggleMenu);
         
-        // Linke tıklayınca menüyü kapat
+        // Linke tıklayınca menüyü kapat ve ikonu eski haline (3 çizgi) getir
         document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', () => { navLinks.classList.remove('active'); });
+            link.addEventListener('click', () => { 
+                navLinks.classList.remove('active'); 
+                hamburgerIcon.classList.remove('fa-times');
+                hamburgerIcon.classList.add('fa-bars');
+                hamburgerBtn.style.transform = 'rotate(0deg)';
+            });
         });
 
         // MATRIX (SCRAMBLE) METİN EFEKTİ
