@@ -324,6 +324,10 @@
         
         /* MENÜ AÇILINCA GİZLEME (BU KOD EK SİHİRDİR) */
         body.menu-open .occ-card, 
+        /* Menü açıkken arka planın kaymasını kilitler */
+body.menu-open {
+    overflow: hidden !important;
+}
         body.menu-open .wp-float, 
         body.menu-open .ig-float {
             display: none !important;
