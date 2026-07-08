@@ -126,9 +126,13 @@
        @media (max-width: 480px) {
     /* Kartı en aşağıya sabitle */
     .occ-card { 
-        right: 10px; 
-        bottom: 10px; 
-        width: calc(40% - 20px); /* Ekran genişliğine göre ayarla */
+        .occ-card { right: 15px; bottom: 15px; } 
+    .occ-card-body { gap: 12px; }
+    .occ-card-donut { width: 50px; height: 50px; }
+    .occ-card-inner { width: 36px; height: 36px; }
+    #occ-card-count { font-size: 1.05rem; }
+    .occ-live-label { font-size: 0.6rem !important; }
+    .occ-legend-row { font-size: 0.75rem; }
     }
 
     /* İkonları kartın üzerine, aralarında boşluk bırakarak yerleştir */
@@ -366,8 +370,8 @@
             <div class="nav-links" id="nav-links">
                 <a href="#arena">SALON</a>
                 <a href="#pricing">ÜYELİK</a>
-                <a href="#kitle">VKİ</a>
-                <a href="#faq">S.S.S</a>
+                <a href="#kitle">VÜCUT KİTLE ENDEKSİ</a>
+                <a href="#faq">SIKÇA SORULANLAR</a>
             </div>
         </nav>
     </header>
