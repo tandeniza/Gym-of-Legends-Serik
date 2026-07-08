@@ -88,10 +88,8 @@
             .nav-links a:hover::after { width: 100%; }
         }
 
-        /* VİDEO HERO BÖLÜMÜ - VİDEO ZOOM SORUNU ÇÖZÜLDÜ */
+        /* VİDEO HERO BÖLÜMÜ */
         .hero { height: 100vh; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; width: 100%; }
-        
-        /* height 105% ve top -2.5% verilerek zoom azaltıldı, sadece parallax için hafif pay bırakıldı */
         .hero-video { position: absolute; top: -2.5%; left: 0; width: 100%; height: 105%; object-fit: cover; z-index: 1; filter: brightness(0.4) contrast(1.2); transition: transform 0.1s linear; }
         
         .hero-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, #050505 100%); z-index: 2; }
@@ -106,6 +104,16 @@
         .stat-item i { font-size: clamp(1.8rem, 4vw, 2.5rem); color: var(--primary); margin-bottom: 15px; }
         .stat-item h3 { font-size: clamp(1.8rem, 4vw, 2.5rem); font-family: 'Syncopate'; margin-bottom: 5px; }
         .stat-item p { color: var(--text-dim); font-size: clamp(0.75rem, 2vw, 0.9rem); text-transform: uppercase; letter-spacing: 2px; }
+
+        /* SALON YOĞUNLUĞU KARTLARI */
+        .occupancy-container { max-width: 800px; margin: 0 auto; background: var(--card-bg); padding: 40px 30px; border-radius: 20px; border: 1px solid var(--border); text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .occupancy-info h3 { font-family: 'Syncopate'; font-size: clamp(1rem, 3vw, 1.2rem); margin-bottom: 10px; letter-spacing: 2px; }
+        #occupancy-status { transition: color 0.3s ease; }
+        .occupancy-info p { color: var(--text-dim); font-size: 0.85rem; margin-bottom: 25px; text-transform: uppercase; letter-spacing: 1px; }
+        .progress-bar-bg { width: 100%; height: 25px; background: #050505; border-radius: 15px; border: 1px solid var(--border); overflow: hidden; margin-bottom: 15px; position: relative; }
+        .progress-bar-fill { height: 100%; width: 0%; border-radius: 15px; transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.5s ease; }
+        .occupancy-stats { display: flex; justify-content: space-between; align-items: center; color: var(--text-dim); font-weight: 600; font-size: 0.9rem; }
+        .percent-display { font-family: 'Syncopate'; font-size: 1.8rem; color: var(--text-main); }
 
         /* KAYAN TİPOGRAFİ BANDI */
         .marquee-container { width: 100%; overflow: hidden; white-space: nowrap; background: var(--primary); padding: 15px 0; margin-bottom: 60px; border-top: 2px solid #000; border-bottom: 2px solid #000; }
@@ -223,36 +231,21 @@
         }
         
         @media (max-width: 768px) { 
-            /* Menü ve Header */
             .hamburger { display: block; }
-            .nav-links { 
-                position: fixed; top: 0; right: -100%; height: 100vh; width: 100%; max-width: 400px; 
-                background: rgba(5, 5, 5, 0.98); backdrop-filter: blur(15px);
-                flex-direction: column; justify-content: center; align-items: center;
-                transition: 0.4s cubic-bezier(0.77, 0, 0.175, 1); z-index: 1001; 
-                border-left: 1px solid var(--border);
-            }
+            .nav-links { position: fixed; top: 0; right: -100%; height: 100vh; width: 100%; max-width: 400px; background: rgba(5, 5, 5, 0.98); backdrop-filter: blur(15px); flex-direction: column; justify-content: center; align-items: center; transition: 0.4s cubic-bezier(0.77, 0, 0.175, 1); z-index: 1001; border-left: 1px solid var(--border); }
             .nav-links.active { right: 0; box-shadow: -10px 0 50px rgba(0,0,0,0.8); }
             .nav-links a { font-size: 1.5rem; margin: 20px 0; display: block; }
-            
-            /* Boşluklar ve Tipografi */
             .section-padding { padding: 50px 5%; }
             .stats-container { margin: -30px 5% 40px; padding: 25px; grid-template-columns: 1fr; gap: 30px; border-radius: 15px; }
-            
-            /* Galeri / Bento */
             .bento-grid { grid-template-columns: 1fr; grid-template-rows: auto; gap: 12px; } 
             .bento-1, .bento-2, .bento-3, .bento-4 { grid-column: span 1; height: 220px; } 
-            
-            /* Özel İmleç Mobilde İptal */
             .cursor-dot, .cursor-outline { display: none !important; } 
-            
-            /* Yüzen Butonlar (Mobilde Küçültme) */
             .wp-float, .ig-float { width: 50px; height: 50px; font-size: 24px; right: 15px; }
             .wp-float { bottom: 15px; }
             .ig-float { bottom: 75px; }
-            
-            /* BMI Görselini Gizleme (Alanı Daraltmamak İçin) */
             .bmi-section img { display: none; }
+            .occupancy-container { padding: 30px 20px; }
+            .percent-display { font-size: 1.5rem; }
         }
 
         @media (max-width: 480px) {
@@ -282,10 +275,11 @@
             <div class="logo">GYM OF <span>LEGENDS</span></div>
             <div class="hamburger" id="hamburger-btn"><i class="fas fa-bars"></i></div>
             <div class="nav-links" id="nav-links">
+                <a href="#yogunluk">YOĞUNLUK</a>
                 <a href="#arena">SALON</a>
                 <a href="#pricing">ÜYELİK</a>
-                 <a href="#kitle">VÜCUT KİTLE İNDEKSİ   </a>
-                <a href="#faq">SIKÇA SORULANLAR</a>
+                <a href="#kitle">VKİ</a>
+                <a href="#faq">S.S.S</a>
             </div>
         </nav>
     </header>
@@ -306,6 +300,29 @@
         <div class="stat-item"><i class="fas fa-dumbbell"></i><h3>Pro</h3><p>Kapsamlı Ekipman</p></div>
         <div class="stat-item"><i class="fas fa-medal"></i><h3>2018</h3><p>Kuruluş Yılı</p></div>
     </div>
+
+    <section id="yogunluk" class="section-padding" style="padding-top: 20px;">
+        <div class="section-header" data-aos="fade-up">
+            <h2 class="matrix-text">SALON YOĞUNLUĞU</h2>
+            <div class="line"></div>
+        </div>
+        <div class="occupancy-container" data-aos="fade-up">
+            <div class="occupancy-info">
+                <h3>ŞU ANKİ DURUM: <span id="occupancy-status">HESAPLANIYOR...</span></h3>
+                <p>İçerideki aktif üye sayısına göre anlık doluluk oranımız.</p>
+            </div>
+            
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" id="occupancy-bar"></div>
+            </div>
+            
+            <div class="occupancy-stats">
+                <span>%0</span>
+                <span id="occupancy-percent" class="percent-display">%0</span>
+                <span>%100</span>
+            </div>
+        </div>
+    </section>
 
     <div class="marquee-container" data-aos="fade-up">
         <div class="marquee-content">
@@ -456,8 +473,6 @@
         
         function toggleMenu() {
             navLinks.classList.toggle('active');
-            
-            // Menü açıksa çarpı yap ve döndür, kapalıysa 3 çizgi yap
             if(navLinks.classList.contains('active')) {
                 hamburgerIcon.classList.remove('fa-bars');
                 hamburgerIcon.classList.add('fa-times');
@@ -471,7 +486,6 @@
 
         hamburgerBtn.addEventListener('click', toggleMenu);
         
-        // Linke tıklayınca menüyü kapat ve ikonu eski haline (3 çizgi) getir
         document.querySelectorAll('.nav-links a').forEach(link => {
             link.addEventListener('click', () => { 
                 navLinks.classList.remove('active'); 
@@ -507,7 +521,7 @@
         }, { threshold: 0.5 });
         scrambleElements.forEach(el => scrambleObserver.observe(el));
 
-        // Özel İmleç (Sadece Masaüstü)
+        // Özel İmleç
         if (window.matchMedia("(pointer: fine)").matches) {
             const cursorDot = document.querySelector('.cursor-dot');
             const cursorOutline = document.querySelector('.cursor-outline');
@@ -544,30 +558,26 @@
             let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
             scrollBar.style.width = (winScroll / height) * 100 + "%";
 
-            // Paralaks Video 
             let scrollY = window.scrollY;
             if (scrollY < window.innerHeight && window.innerWidth > 768) { 
                 heroVideo.style.transform = `translateY(${scrollY * 0.4}px)`; 
             }
             
-            // Paralaks Bento (Sadece Masaüstü için)
             if (window.innerWidth > 768) {
                 bentoItems.forEach(item => {
                     let speed = item.getAttribute('data-speed');
                     if(speed) { item.style.transform = `translateY(${scrollY * speed - 50}px)`; }
                 });
             } else {
-                // Mobilde transform'u sıfırla ki üst üste binmesin
                 bentoItems.forEach(item => item.style.transform = 'none');
             }
         });
 
-        // BENTO GRID VIDEO HOVER KONTROLÜ VE LIGHTBOX
+        // BENTO GRID
         bentoItems.forEach(item => {
             const video = item.querySelector('.hover-video');
             const img = item.querySelector('img');
             
-            // Yalnızca mouse hover yapılabilen cihazlarda (mobilde iptal)
             if(video && window.matchMedia("(hover: hover)").matches) {
                 item.addEventListener('mouseenter', () => video.play());
                 item.addEventListener('mouseleave', () => { video.pause(); video.currentTime = 0; });
@@ -610,6 +620,94 @@
         // Lightbox
         function openLightbox(src) { document.getElementById('lightbox').style.display = "block"; document.getElementById('lightbox-img').src = src; }
         function closeLightbox() { document.getElementById('lightbox').style.display = "none"; }
+
+       // --- SALON YOĞUNLUĞU KONTROLÜ (PROXY ÇÖZÜMLÜ) ---
+        const BRANCH_ID = "1"; 
+        const SESSION_TOKEN = "ItADhW1EIh:session:GymTekno-9e6d7c1e-85db-4557-9e0b-080440eb8df3";
+        const GYM_TEKNO_API_URL = `https://v3alfaapi.gymteknoserver.com/api/gymoflegends06/geciskontrol/ai-yogunluk-mevcut/${BRANCH_ID}?sessionToken=${SESSION_TOKEN}`;
+        
+        // Tarayıcı CORS engeline takılmamak için ücretsiz bir proxy servisi (allorigins) üzerinden istek atıyoruz
+        const PROXY_URL = `https://api.allorigins.win/raw?url=${encodeURIComponent(GYM_TEKNO_API_URL)}`;
+        
+        const MAX_CAPACITY = 150; // Salonun maksimum kişi kapasitesi
+
+        function updateOccupancy(percent) {
+            const bar = document.getElementById('occupancy-bar');
+            const percentText = document.getElementById('occupancy-percent');
+            const statusText = document.getElementById('occupancy-status');
+
+            percent = Math.max(0, Math.min(100, Math.round(percent)));
+            bar.style.width = percent + '%';
+            
+            let current = 0;
+            let step = Math.ceil(percent / 30) || 1; 
+            let timer = setInterval(() => {
+                current += step;
+                if(current >= percent) {
+                    current = percent;
+                    clearInterval(timer);
+                }
+                percentText.innerText = '%' + current;
+            }, 30);
+
+            if(percent < 40) {
+                statusText.innerText = "SAKİN";
+                statusText.style.color = "#25d366";
+                bar.style.background = "#25d366";
+                bar.style.boxShadow = "0 0 15px rgba(37, 211, 102, 0.4)";
+            } else if (percent < 75) {
+                statusText.innerText = "NORMAL";
+                statusText.style.color = "var(--primary)";
+                bar.style.background = "var(--primary)";
+                bar.style.boxShadow = "0 0 15px var(--primary-glow)";
+            } else {
+                statusText.innerText = "YOĞUN";
+                statusText.style.color = "#ff4444";
+                bar.style.background = "#ff4444";
+                bar.style.boxShadow = "0 0 15px rgba(255, 68, 68, 0.4)";
+            }
+        }
+
+        async function fetchOccupancyData() {
+            try {
+                console.log("Gym Tekno API'sine istek atılıyor...");
+                
+                const response = await fetch(PROXY_URL);
+                
+                if (!response.ok) {
+                    console.error("Sunucu Hatası:", response.status, response.statusText);
+                    throw new Error("API yanıt vermedi. Durum Kodu: " + response.status);
+                }
+                
+                const data = await response.json();
+                console.log("Gym Tekno'dan Gelen Orijinal Veri:", data); // Gelen verinin yapısını konsola yazdırıyoruz
+                
+                // Gelen verinin formatına göre sayıyı yakalamaya çalışıyoruz
+                let activeCount = data.mevcut || data.count || data.aktif || data.yogunluk || data.data || Number(data);
+                
+                if (activeCount === undefined || isNaN(activeCount)) {
+                     console.error("Veri içinden sayı bulunamadı! JSON yapısını inceleyin.");
+                     activeCount = 0;
+                }
+
+                let calculatedPercent = (activeCount / MAX_CAPACITY) * 100;
+                updateOccupancy(calculatedPercent);
+
+            } catch (error) {
+                console.error("Yakalanan Hata Detayı:", error);
+                document.getElementById('occupancy-status').innerText = "BAĞLANTI HATASI";
+                document.getElementById('occupancy-status').style.color = "#ff4444";
+                document.getElementById('occupancy-bar').style.width = "0%";
+                document.getElementById('occupancy-percent').innerText = "%0";
+            }
+        }
+
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                fetchOccupancyData(); 
+                setInterval(fetchOccupancyData, 300000); // 5 dakikada bir yenile
+            }, 1000);
+        });
     </script>
 </body>
 </html>
