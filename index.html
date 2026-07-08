@@ -790,6 +790,12 @@ body.menu-open .ig-float {
                 setInterval(fetchOccupancyData, 20000); 
             }, 1000);
         });
+        const menuBtn = document.querySelector('.menu-btn'); // Senin menü butonunun seçicisi
+
+menuBtn.addEventListener('click', () => {
+    // Eğer menü zaten açıksa (body'de sınıf varsa) sınıfı kaldır, yoksa ekle
+    document.body.classList.toggle('menu-open');
+});
     </script>
 </body>
 </html>
