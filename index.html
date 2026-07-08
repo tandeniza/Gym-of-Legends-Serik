@@ -123,15 +123,29 @@
         .occ-legend-row .legend-dot { width: 10px; height: 10px; border-width: 2px; }
         .occ-legend-row .occ-legend-value { color: #fff; font-weight: 700; margin-left: auto; padding-left: 10px; }
 
-        @media (max-width: 480px) {
-                .occ-card { right: 15px; bottom: 15px; } /* Kart en altta */
-            .occ-card-body { gap: 12px; }
-            .occ-card-donut { width: 50px; height: 50px; }
-            .occ-card-inner { width: 36px; height: 36px; }
-            #occ-card-count { font-size: 1.05rem; }
-            .occ-live-label { font-size: 0.6rem !important; }
-            .occ-legend-row { font-size: 0.75rem; }
-        }
+       @media (max-width: 480px) {
+    /* Yoğunluk kartını en aşağıya sabitle, ikonları onun üzerine diz */
+    .occ-card { 
+        right: 10px; 
+        bottom: 10px; 
+        padding: 8px 10px; 
+        width: 180px; /* Biraz daraltalım ki yer kalsın */
+    }
+
+    /* İkonları kartın hemen üzerine hizala */
+    .wp-float { 
+        bottom: 130px; 
+        right: 15px; 
+    }
+    .ig-float { 
+        bottom: 190px; 
+        right: 15px; 
+    }
+
+    /* Kartın içindeki metinleri daha da küçültelim */
+    #occ-card-count { font-size: 1rem; }
+    .occ-legend-row { font-size: 0.7rem; }
+}
 
         #scroll-progress { position: fixed; top: 0; left: 0; height: 4px; background: var(--primary); z-index: 2000; width: 0%; }
 
