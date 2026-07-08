@@ -26,7 +26,7 @@
             overflow-x: hidden; 
             width: 100%; 
             position: relative;
-            scroll-behavior: smooth; /* Yumuşak kaydırma için */
+            scroll-behavior: smooth; 
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
@@ -40,7 +40,7 @@
         /* ÖZEL İMLEÇ (Sadece Masaüstü) */
         @media (min-width: 768px) {
             body { cursor: none; }
-            a, button, input, .bento-item, .faq-question, .close-lb, .hamburger, #scrollToTopBtn { cursor: none; }
+            a, button, input, .bento-item, .faq-question, .close-lb, .hamburger, #scrollToTopBtn, .wp-float, .wa-option, .close-wa, .close-announcement, .f-card, .p-card { cursor: none; }
         }
         
         body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--text-main); line-height: 1.6; }
@@ -54,110 +54,75 @@
         #preloader h2 { font-family: 'Syncopate'; font-size: clamp(1.2rem, 4vw, 1.5rem); letter-spacing: 5px; color: #fff; text-align: center; padding: 0 20px; }
         @keyframes pulseDumbbell { 0% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.2); opacity: 1; text-shadow: 0 0 20px var(--primary); } 100% { transform: scale(1); opacity: 0.8; } }
 
-        /* YÜZEN BUTONLAR */
-        .wp-float, .ig-float {
-            position: fixed; right: 20px; width: 60px; height: 60px;
-            border-radius: 50px; display: flex; align-items: center; justify-content: center;
-            font-size: 30px; color: white; z-index: 9999; box-shadow: 0 4px 15px rgba(0,0,0,0.5); transition: 0.3s ease; text-decoration: none;
-        }
-        .wp-float { 
-            bottom: 160px; 
-            background-color: #25d366; 
-        }
-        .ig-float { 
-            bottom: 245px; 
-            background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); 
-        }
-        
-        @media (hover: hover) {
-            .wp-float:hover { bottom: 150px; }
-            .ig-float:hover { bottom: 215px; }
-        }
+        /* --- DİNAMİK DUYURU BANDI --- */
+        .announcement-bar { position: fixed; top: 0; left: 0; width: 100%; height: 40px; background: var(--primary); color: #000; text-align: center; font-size: 0.8rem; font-weight: 800; z-index: 10050; font-family: 'Outfit', sans-serif; letter-spacing: 1px; display: flex; justify-content: center; align-items: center; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+        .announcement-bar.closed { transform: translateY(-100%); }
+        .announcement-bar p { margin: 0; display: flex; align-items: center; gap: 10px; }
+        .close-announcement { position: absolute; right: 15px; cursor: pointer; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; width: 25px; height: 25px; border-radius: 50%; transition: 0.3s; }
+        @media (hover: hover) { .close-announcement:hover { background: rgba(0,0,0,0.2); color: #fff; } }
 
-        /* YUKARI ÇIK BUTONU (SOL ALTA YERLEŞTİRİLDİ) */
-        #scrollToTopBtn {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            z-index: 9999;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background-color: var(--primary);
-            color: #000;
-            border: none;
-            font-size: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            cursor: pointer;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(20px);
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        #scrollToTopBtn.show {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-        @media (hover: hover) {
-            #scrollToTopBtn:hover {
-                background-color: #fff;
-                transform: translateY(-5px) scale(1.05);
-            }
-        }
+        #scroll-progress { position: fixed; top: 40px; left: 0; height: 4px; background: var(--primary); z-index: 2000; width: 0%; transition: top 0.4s ease; }
+        #scroll-progress.bar-closed { top: 0 !important; }
+
+        /* HEADER & MOBİL MENÜ */
+        header { position: fixed; top: 40px; width: 100%; z-index: 1000; padding: 20px 0; transition: top 0.4s ease, background 0.5s, padding 0.5s, border-bottom 0.5s; }
+        header.bar-closed { top: 0 !important; }
+        header.scrolled { background: rgba(0,0,0,0.95); backdrop-filter: blur(20px); padding: 15px 0; border-bottom: 1px solid var(--border); }
+        
+        nav { max-width: 1400px; margin: 0 auto; padding: 0 5%; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-family: 'Syncopate', sans-serif; font-size: clamp(1.1rem, 3vw, 1.3rem); font-weight: 700; letter-spacing: 2px; cursor: pointer; z-index: 1002; position: relative; }
+        .logo span { color: var(--primary); }
+        .hamburger { display: none; font-size: 1.8rem; color: var(--primary); cursor: pointer; z-index: 1002; transition: 0.3s; }
+        
+        .nav-links { display: flex; gap: 30px; align-items: center; }
+        .nav-links a { color: var(--text-main); text-decoration: none; font-size: 0.75rem; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; transition: 0.3s; position: relative; }
+        .nav-links a::after { content: ''; position: absolute; bottom: -5px; left: 0; width: 0; height: 2px; background: var(--primary); transition: 0.3s; }
+        @media (hover: hover) { .nav-links a:hover::after { width: 100%; } }
+
+        /* YÜZEN BUTONLAR */
+        .wp-float, .ig-float { position: fixed; right: 20px; width: 60px; height: 60px; border-radius: 50px; display: flex; align-items: center; justify-content: center; font-size: 30px; color: white; z-index: 9999; box-shadow: 0 4px 15px rgba(0,0,0,0.5); transition: 0.3s ease; text-decoration: none; cursor: pointer; }
+        .wp-float { bottom: 160px; background-color: #25d366; }
+        .ig-float { bottom: 245px; background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+        @media (hover: hover) { .wp-float:hover { bottom: 150px; } .ig-float:hover { bottom: 215px; } }
+
+        /* WHATSAPP AKILLI KUTU */
+        .wa-popup { position: fixed; bottom: 230px; right: 20px; width: 320px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); z-index: 10000; opacity: 0; visibility: hidden; transform: translateY(20px) scale(0.95); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: flex; flex-direction: column; overflow: hidden; }
+        .wa-popup.show { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
+        .wa-popup-header { background: #000; padding: 15px 20px; display: flex; align-items: center; gap: 15px; border-bottom: 1px solid var(--border); position: relative; }
+        .wa-popup-header .fa-whatsapp { font-size: 24px; color: #25d366; }
+        .wa-popup-header h4 { font-family: 'Outfit', sans-serif; font-size: 1rem; color: #fff; margin: 0; font-weight: 700; }
+        .wa-popup-header span { font-size: 0.75rem; color: #25d366; font-weight: 600; letter-spacing: 1px; }
+        .close-wa { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); color: var(--text-dim); cursor: pointer; transition: 0.3s; font-size: 1.2rem; }
+        .close-wa:hover { color: var(--primary); }
+        .wa-popup-body { padding: 20px; display: flex; flex-direction: column; gap: 10px; }
+        .wa-popup-body p { color: var(--text-dim); font-size: 0.85rem; margin-bottom: 10px; line-height: 1.4; }
+        .wa-option { background: #111; border: 1px solid var(--border); color: #fff; padding: 12px 15px; border-radius: 8px; text-align: left; font-family: 'Outfit', sans-serif; font-size: 0.85rem; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 10px; font-weight: 600; }
+        .wa-option i { color: var(--primary); width: 15px; text-align: center; }
+        @media (hover: hover) { .wa-option:hover { background: var(--primary); border-color: var(--primary); color: #000; transform: translateX(5px); } .wa-option:hover i { color: #000; } }
+
+        /* YUKARI ÇIK BUTONU */
+        #scrollToTopBtn { position: fixed; bottom: 20px; left: 20px; z-index: 9999; width: 50px; height: 50px; border-radius: 50%; background-color: var(--primary); color: #000; border: none; font-size: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); cursor: pointer; opacity: 0; visibility: hidden; transform: translateY(20px); transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; }
+        #scrollToTopBtn.show { opacity: 1; visibility: visible; transform: translateY(0); }
+        @media (hover: hover) { #scrollToTopBtn:hover { background-color: #fff; transform: translateY(-5px) scale(1.05); } }
 
         /* CANLI DURUM KARTI */
-        .occ-card {
-            position: fixed; 
-            right: 20px; 
-            bottom: 20px; 
-            z-index: 9999;
-            background: var(--card-bg); 
-            border: 1px solid var(--border); 
-            border-radius: 14px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.5); 
-            padding: 14px 18px;
-            display: flex; 
-            flex-direction: column; 
-            gap: 10px;
-        }
+        .occ-card { position: fixed; right: 20px; bottom: 20px; z-index: 9999; background: var(--card-bg); border: 1px solid var(--border); border-radius: 14px; box-shadow: 0 8px 25px rgba(0,0,0,0.5); padding: 14px 18px; display: flex; flex-direction: column; gap: 10px; }
         .occ-card-header { display: flex; align-items: center; gap: 8px; }
-        .occ-live-dot {
-            width: 8px; height: 8px; border-radius: 50%; background: var(--primary);
-            box-shadow: 0 0 8px var(--primary); animation: occPulse 1.5s infinite;
-        }
-        @keyframes occPulse {
-            0% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.4); opacity: 0.6; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-        .occ-card-header span.occ-live-label {
-            font-family: 'Outfit', sans-serif; font-size: 0.7rem; font-weight: 700;
-            letter-spacing: 2px; text-transform: uppercase; color: var(--primary);
-        }
+        .occ-live-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--primary); box-shadow: 0 0 8px var(--primary); animation: occPulse 1.5s infinite; }
+        @keyframes occPulse { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.4); opacity: 0.6; } 100% { transform: scale(1); opacity: 1; } }
+        .occ-card-header span.occ-live-label { font-family: 'Outfit', sans-serif; font-size: 0.7rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--primary); }
         .occ-card-body { display: flex; align-items: center; gap: 16px; }
-        .occ-card-donut {
-            width: 62px; height: 62px; border-radius: 50%; background: #222; flex-shrink: 0;
-            display: flex; align-items: center; justify-content: center;
-            transition: background 1s ease-in-out;
-        }
-        .occ-card-inner {
-            width: 46px; height: 46px; border-radius: 50%; background: var(--card-bg);
-            display: flex; align-items: center; justify-content: center;
-        }
+        .occ-card-donut { width: 62px; height: 62px; border-radius: 50%; background: #222; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: background 1s ease-in-out; }
+        .occ-card-inner { width: 46px; height: 46px; border-radius: 50%; background: var(--card-bg); display: flex; align-items: center; justify-content: center; }
         #occ-card-count { font-family: 'Outfit', sans-serif; font-size: 1.3rem; font-weight: 900; color: #fff; }
         .occ-card-legend { display: flex; flex-direction: column; gap: 6px; }
-        .occ-legend-row {
-            display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: var(--text-dim);
-            white-space: nowrap;
-        }
+        .occ-legend-row { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: var(--text-dim); white-space: nowrap; }
         .occ-legend-row .legend-dot { width: 10px; height: 10px; border-width: 2px; }
         .occ-legend-row .occ-legend-value { color: #fff; font-weight: 700; margin-left: auto; padding-left: 10px; }
 
         @media (max-width: 480px) {
+            .announcement-bar p span { font-size: 0.65rem; }
+            .announcement-bar { padding: 0 35px; }
             .occ-card { right: 15px; bottom: 15px; } 
             .occ-card-body { gap: 12px; }
             .occ-card-donut { width: 50px; height: 50px; }
@@ -165,37 +130,15 @@
             #occ-card-count { font-size: 1.05rem; }
             .occ-live-label { font-size: 0.6rem !important; }
             .occ-legend-row { font-size: 0.75rem; }
-
             .wp-float { bottom: 150px !important; right: 15px; }
             .ig-float { bottom: 220px !important; right: 15px; }
-            
+            .wa-popup { right: 15px; bottom: 215px; width: calc(100% - 30px); }
             #scrollToTopBtn { bottom: 15px; left: 15px; width: 45px; height: 45px; font-size: 18px; }
-        }
-
-        #scroll-progress { position: fixed; top: 0; left: 0; height: 4px; background: var(--primary); z-index: 2000; width: 0%; }
-
-        /* HEADER & MOBİL MENÜ */
-        header { position: fixed; top: 0; width: 100%; z-index: 1000; padding: 20px 0; transition: 0.5s; }
-        header.scrolled { background: rgba(0,0,0,0.95); backdrop-filter: blur(20px); padding: 15px 0; border-bottom: 1px solid var(--border); }
-        
-        nav { max-width: 1400px; margin: 0 auto; padding: 0 5%; display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-family: 'Syncopate', sans-serif; font-size: clamp(1.1rem, 3vw, 1.3rem); font-weight: 700; letter-spacing: 2px; cursor: pointer; z-index: 1002; position: relative; }
-        .logo span { color: var(--primary); }
-        
-        .hamburger { display: none; font-size: 1.8rem; color: var(--primary); cursor: pointer; z-index: 1002; transition: 0.3s; }
-        
-        .nav-links { display: flex; gap: 30px; align-items: center; }
-        .nav-links a { color: var(--text-main); text-decoration: none; font-size: 0.75rem; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; transition: 0.3s; position: relative; }
-        .nav-links a::after { content: ''; position: absolute; bottom: -5px; left: 0; width: 0; height: 2px; background: var(--primary); transition: 0.3s; }
-        
-        @media (hover: hover) {
-            .nav-links a:hover::after { width: 100%; }
         }
 
         /* VİDEO HERO BÖLÜMÜ */
         .hero { height: 100vh; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; width: 100%; }
         .hero-video { position: absolute; top: -2.5%; left: 0; width: 100%; height: 105%; object-fit: cover; z-index: 1; filter: brightness(0.4) contrast(1.2); transition: transform 0.1s linear; }
-        
         .hero-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, #050505 100%); z-index: 2; }
         .hero-content { z-index: 5; text-align: center; pointer-events: none; width: 100%; padding: 0 20px; }
         .hero h1 { font-family: 'Syncopate', sans-serif; font-size: clamp(2rem, 10vw, 8rem); line-height: 1.1; font-weight: 700; text-transform: uppercase; margin-bottom: 20px; text-shadow: 0 10px 30px rgba(0,0,0,0.8); }
@@ -233,12 +176,7 @@
         .bento-item { position: relative; overflow: hidden; border-radius: 12px; border: 1px solid var(--border); cursor: pointer; transition: transform 0.1s linear; background: #000; }
         .bento-item img { width: 100%; height: 100%; object-fit: cover; transition: 0.8s; filter: grayscale(0.8); z-index: 1; position: relative; }
         .bento-item .hover-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 2; opacity: 0; transition: opacity 0.4s ease; pointer-events: none; }
-        
-        @media (hover: hover) {
-            .bento-item:hover img { transform: scale(1.05); filter: grayscale(0); }
-            .bento-item:hover .hover-video { opacity: 1; } 
-        }
-        
+        @media (hover: hover) { .bento-item:hover img { transform: scale(1.05); filter: grayscale(0); } .bento-item:hover .hover-video { opacity: 1; } }
         .bento-1 { grid-column: span 2; grid-row: span 2; }
         .bento-2 { grid-column: span 2; }
         .bento-3 { grid-column: span 1; }
@@ -248,23 +186,35 @@
         .lightbox { display: none; position: fixed; z-index: 100000; padding-top: 80px; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.95); backdrop-filter: blur(5px); }
         .lightbox-content { margin: auto; display: block; max-width: 95%; max-height: 80vh; border-radius: 10px; box-shadow: 0 0 50px rgba(255,102,0,0.2); animation: zoom 0.3s ease; object-fit: contain; }
         .close-lb { position: absolute; top: 20px; right: 30px; color: #fff; font-size: 40px; font-weight: bold; cursor: pointer; transition: 0.3s; z-index: 100001; }
-        
-        @media (hover: hover) {
-            .close-lb:hover { color: var(--primary); }
-        }
+        @media (hover: hover) { .close-lb:hover { color: var(--primary); } }
         @keyframes zoom { from {transform:scale(0)} to {transform:scale(1)} }
+
+        /* YENİ: 3D TILT EFEKT ALTYAPISI */
+        .tilt-card {
+            position: relative;
+            transform-style: preserve-3d;
+            /* Transform'u CSS transition ile ezmemek için sadece border/shadow efekti bırakıldı */
+            transition: border-color 0.4s ease, box-shadow 0.4s ease;
+        }
+        /* Fare üzerinde dolaşırken parlayan iç cam/yansıma divi */
+        .tilt-card .glare {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            border-radius: inherit;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: 10;
+        }
 
         /* HİZMETLER */
         .features { background: #080808; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
         .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px; }
-        .f-card { padding: 40px 20px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 15px; transition: 0.4s; text-align: center; }
-        
-        @media (hover: hover) {
-            .f-card:hover { border-color: var(--primary); transform: translateY(-5px); }
-        }
-        .f-card i { font-size: 2.5rem; color: var(--primary); margin-bottom: 25px; }
-        .f-card h3 { font-family: 'Syncopate'; font-size: 1rem; margin-bottom: 15px; }
-        .f-card p { color: var(--text-dim); font-size: 0.95rem; }
+        .f-card { padding: 40px 20px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 15px; text-align: center; }
+        @media (hover: hover) { .f-card:hover { border-color: var(--primary); box-shadow: 0 10px 30px rgba(255,102,0,0.1); } }
+        .f-card i { font-size: 2.5rem; color: var(--primary); margin-bottom: 25px; transform: translateZ(30px); display: inline-block; }
+        .f-card h3 { font-family: 'Syncopate'; font-size: 1rem; margin-bottom: 15px; transform: translateZ(20px); }
+        .f-card p { color: var(--text-dim); font-size: 0.95rem; transform: translateZ(10px); }
 
         /* VÜCUT KİTLE İNDEKSİ (BMI) */
         .bmi-section { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
@@ -272,30 +222,21 @@
         .bmi-input { width: 100%; padding: 15px; background: #050505; border: 1px solid var(--border); color: #fff; border-radius: 8px; margin-bottom: 15px; font-family: 'Outfit'; font-size: 1rem; }
         .bmi-input:focus { border-color: var(--primary); }
         .btn-calc { width: 100%; padding: 15px; background: var(--primary); color: #000; border: none; border-radius: 8px; font-weight: 900; font-size: 1rem; cursor: pointer; transition: 0.3s; letter-spacing: 2px; }
-        
-        @media (hover: hover) {
-            .btn-calc:hover { background: #fff; }
-        }
+        @media (hover: hover) { .btn-calc:hover { background: #fff; } }
         #bmi-result { margin-top: 20px; font-size: 1.1rem; font-weight: 700; color: var(--primary); text-align: center; line-height: 1.4; }
 
         /* FİYATLANDIRMA */
         .price-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px; }
-        .p-card { background: #0c0c0c; padding: 40px 20px; border-radius: 20px; border: 1px solid var(--border); position: relative; transition: 0.4s; text-align: center; }
-        
-        @media (hover: hover) {
-            .p-card:hover { border-color: var(--primary); }
-        }
-        .p-card .p-type { font-family: 'Syncopate'; font-size: 0.8rem; color: var(--primary); margin-bottom: 20px; display: block; letter-spacing: 3px; }
-        .p-card .p-val { font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 900; margin-bottom: 25px; line-height: 1; }
+        .p-card { background: #0c0c0c; padding: 40px 20px; border-radius: 20px; border: 1px solid var(--border); text-align: center; }
+        @media (hover: hover) { .p-card:hover { border-color: var(--primary); box-shadow: 0 15px 40px rgba(255,102,0,0.15); } }
+        .p-card .p-type { font-family: 'Syncopate'; font-size: 0.8rem; color: var(--primary); margin-bottom: 20px; display: block; letter-spacing: 3px; transform: translateZ(20px); }
+        .p-card .p-val { font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 900; margin-bottom: 25px; line-height: 1; transform: translateZ(40px); }
         .p-card .p-val span { font-size: 1rem; color: var(--text-dim); }
-        .p-card ul { list-style: none; margin-bottom: 30px; text-align: left; padding: 0 10px; }
+        .p-card ul { list-style: none; margin-bottom: 30px; text-align: left; padding: 0 10px; transform: translateZ(15px); }
         .p-card ul li { margin-bottom: 15px; color: var(--text-dim); display: flex; align-items: center; gap: 10px; font-size: 0.85rem; }
         .p-card ul li i { color: var(--primary); font-size: 0.8rem; flex-shrink: 0; }
-        .btn-join { display: block; width: 100%; padding: 16px; background: var(--primary); color: #000; text-decoration: none; font-weight: 900; letter-spacing: 2px; border-radius: 8px; transition: 0.3s; font-size: 0.9rem; }
-        
-        @media (hover: hover) {
-            .btn-join:hover { background: #fff; transform: scale(1.02); }
-        }
+        .btn-join { display: block; width: 100%; padding: 16px; background: var(--primary); color: #000; text-decoration: none; font-weight: 900; letter-spacing: 2px; border-radius: 8px; transition: 0.3s; font-size: 0.9rem; transform: translateZ(30px); }
+        @media (hover: hover) { .btn-join:hover { background: #fff; } }
 
         /* SSS AKORDEON */
         .faq-section { max-width: 900px; margin: 0 auto; width: 100%; }
@@ -313,10 +254,7 @@
         .footer-logo p { color: var(--text-dim); max-width: 400px; margin-top: 15px; font-size: 0.9rem; }
         .footer-links h4 { font-family: 'Syncopate'; font-size: 0.8rem; color: var(--primary); margin-bottom: 20px; }
         .map-container { max-width: 1400px; margin: 50px auto 0; border-radius: 20px; overflow: hidden; border: 1px solid var(--border); filter: grayscale(1) invert(0.92); transition: 0.5s; width: 100%; }
-        
-        @media (hover: hover) {
-            .map-container:hover { filter: grayscale(0.5) invert(0); }
-        }
+        @media (hover: hover) { .map-container:hover { filter: grayscale(0.5) invert(0); } }
         .map-container iframe { display: block; width: 100%; height: clamp(250px, 40vw, 350px); border: 0; }
         .footer-bottom { text-align: center; margin-top: 50px; padding-top: 20px; border-top: 1px solid var(--border); font-size: 0.8rem; color: var(--text-dim); }
 
@@ -340,32 +278,22 @@
             .bento-grid { grid-template-columns: 1fr; grid-template-rows: auto; gap: 12px; } 
             .bento-1, .bento-2, .bento-3, .bento-4 { grid-column: span 1; height: 220px; } 
             .cursor-dot, .cursor-outline { display: none !important; } 
-            
-            .wp-float, .ig-float { width: 50px; height: 50px; font-size: 24px; right: 15px; }
-            .wp-float { bottom: 130px; } 
-            .ig-float { bottom: 190px; }
-            
             .bmi-section img { display: none; }
         }
 
         @media (max-width: 480px) {
-            .p-card { padding: 30px 15px; }
-            .f-card { padding: 30px 15px; }
+            .p-card, .f-card { padding: 30px 15px; }
             .hero-content { padding: 0 10px; }
         }
 
         /* --- MENÜ AÇIKKEN KAYMAYI KİLİTLEME KODLARI --- */
-        html.menu-open, body.menu-open {
-            overflow: hidden !important;
-            touch-action: none !important;
-        }
-        
+        html.menu-open, body.menu-open { overflow: hidden !important; touch-action: none !important; }
         body.menu-open .occ-card, 
         body.menu-open .wp-float, 
         body.menu-open .ig-float,
-        body.menu-open #scrollToTopBtn {
-            display: none !important;
-        }
+        body.menu-open #scrollToTopBtn,
+        body.menu-open .wa-popup,
+        body.menu-open .announcement-bar { display: none !important; }
     </style>
 </head>
 <body>
@@ -378,22 +306,36 @@
     <div class="cursor-dot"></div>
     <div class="cursor-outline"></div>
 
+    <div id="announcement-bar" class="announcement-bar">
+        <p><i class="fas fa-bolt"></i> <span><strong>YAZ KAMPANYASI:</strong> 3 Aylık Üyeliklerde Ekstra 15 Gün Bizden!</span> <i class="fas fa-bolt"></i></p>
+        <span class="close-announcement" onclick="closeAnnouncement()"><i class="fas fa-times"></i></span>
+    </div>
+
     <a href="https://www.instagram.com/gymoflegendsserikk/" class="ig-float" target="_blank"><i class="fab fa-instagram"></i></a>
-    <a href="https://wa.me/905321361240?text=Merhaba,%20Gym%20of%20Legends%20salonunuz%20ve%20üyelikler%20hakkında%20bilgi%20almak%20istiyorum." class="wp-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
+    
+    <div class="wp-float" onclick="toggleWaPopup()"><i class="fab fa-whatsapp"></i></div>
+
+    <div class="wa-popup" id="waPopup">
+        <div class="wa-popup-header">
+            <i class="fab fa-whatsapp"></i>
+            <div><h4>Gym of Legends</h4><span>Çevrimiçi</span></div>
+            <i class="fas fa-times close-wa" onclick="toggleWaPopup()"></i>
+        </div>
+        <div class="wa-popup-body">
+            <p>Efsanelerin arasına hoş geldiniz. Size nasıl yardımcı olabiliriz?</p>
+            <button class="wa-option" onclick="sendWa('Merhaba, üyelik paketleri ve güncel fiyatlar hakkında bilgi almak istiyorum.')"><i class="fas fa-medal"></i> Üyelik Bilgisi Al</button>
+            <button class="wa-option" onclick="sendWa('Merhaba, birebir özel ders (PT) programları ve eğitmenler hakkında detaylı bilgi alabilir miyim?')"><i class="fas fa-dumbbell"></i> Özel Ders (PT) Detayları</button>
+            <button class="wa-option" onclick="sendWa('Merhaba, salonun güncel konumunu ve yol tarifini alabilir miyim?')"><i class="fas fa-location-dot"></i> Konum İste</button>
+            <button class="wa-option" onclick="sendWa('Merhaba, Gym of Legends hakkında bir sorum var.')"><i class="fas fa-comment-dots"></i> Diğer Sorular</button>
+        </div>
+    </div>
 
     <button id="scrollToTopBtn" title="Yukarı Çık"><i class="fas fa-arrow-up"></i></button>
 
     <div class="occ-card" id="occ-card">
-        <div class="occ-card-header">
-            <span class="occ-live-dot"></span>
-            <span class="occ-live-label">Salon Yoğunluğu</span>
-        </div>
+        <div class="occ-card-header"><span class="occ-live-dot"></span><span class="occ-live-label">Salon Yoğunluğu</span></div>
         <div class="occ-card-body">
-            <div class="occ-card-donut" id="occ-card-donut">
-                <div class="occ-card-inner">
-                    <span id="occ-card-count">0</span>
-                </div>
-            </div>
+            <div class="occ-card-donut" id="occ-card-donut"><div class="occ-card-inner"><span id="occ-card-count">0</span></div></div>
             <div class="occ-card-legend">
                 <div class="occ-legend-row"><span class="legend-dot legend-kadin"></span> Kadın <span class="occ-legend-value" id="occ-card-kadin">-</span></div>
                 <div class="occ-legend-row"><span class="legend-dot legend-erkek"></span> Erkek <span class="occ-legend-value" id="occ-card-erkek">-</span></div>
@@ -442,45 +384,31 @@
     </div>
 
     <section id="arena" class="section-padding">
-        <div class="section-header" data-aos="fade-up">
-            <h2 class="matrix-text">SALONUMUZ</h2>
-            <div class="line"></div>
-        </div>
+        <div class="section-header" data-aos="fade-up"><h2 class="matrix-text">SALONUMUZ</h2><div class="line"></div></div>
         <div class="bento-grid">
             <div class="bento-item bento-1" data-speed="0.05">
                 <img src="gym-of-legends.png" alt="Ana Salon" loading="lazy">
-                <video muted loop playsinline preload="none" class="hover-video">
-                    <source src="0307.mp4" type="video/mp4">
-                </video>
+                <video muted loop playsinline preload="none" class="hover-video"><source src="0307.mp4" type="video/mp4"></video>
             </div>
             <div class="bento-item bento-2" data-speed="0.1">
                 <img src="https://images.unsplash.com/photo-1540497077202-7c8a3999166f?q=80&w=2070" alt="Kardiyo" loading="lazy">
-                <video muted loop playsinline preload="none" class="hover-video">
-                    <source src="0307.mp4" type="video/mp4">
-                </video>
+                <video muted loop playsinline preload="none" class="hover-video"><source src="0307.mp4" type="video/mp4"></video>
             </div>
-            <div class="bento-item bento-3" data-speed="0.03">
-                <img src="https://images.unsplash.com/photo-1571902943202-507ec2618e8f?q=80&w=1975" alt="Ağırlık" loading="lazy">
-            </div>
-            <div class="bento-item bento-4" data-speed="0.07">
-                <img src="https://images.unsplash.com/photo-1593079831268-3381b0db4a77?q=80&w=2069" alt="Dinlenme" loading="lazy">
-            </div>
+            <div class="bento-item bento-3" data-speed="0.03"><img src="https://images.unsplash.com/photo-1571902943202-507ec2618e8f?q=80&w=1975" alt="Ağırlık" loading="lazy"></div>
+            <div class="bento-item bento-4" data-speed="0.07"><img src="https://images.unsplash.com/photo-1593079831268-3381b0db4a77?q=80&w=2069" alt="Dinlenme" loading="lazy"></div>
         </div>
     </section>
 
     <section class="section-padding features">
         <div class="feature-grid">
-            <div class="f-card" data-aos="fade-up"><i class="fas fa-dumbbell"></i><h3>PRO EKİPMAN</h3><p>Serik'in en kapsamlı ağırlık parkuru.</p></div>
-            <div class="f-card" data-aos="fade-up" data-aos-delay="100"><i class="fas fa-bolt"></i><h3>HİJYEN</h3><p>Ferah alanlar ve günlük sterilize.</p></div>
-            <div class="f-card" data-aos="fade-up" data-aos-delay="200"><i class="fas fa-shield-halved"></i><h3>PRESTİJ</h3><p>Hedeflerine odaklanmış seçkin topluluk.</p></div>
+            <div class="f-card tilt-card" data-aos="fade-up"><i class="fas fa-dumbbell"></i><h3>PRO EKİPMAN</h3><p>Serik'in en kapsamlı ağırlık parkuru.</p></div>
+            <div class="f-card tilt-card" data-aos="fade-up" data-aos-delay="100"><i class="fas fa-bolt"></i><h3>HİJYEN</h3><p>Ferah alanlar ve günlük sterilize.</p></div>
+            <div class="f-card tilt-card" data-aos="fade-up" data-aos-delay="200"><i class="fas fa-shield-halved"></i><h3>PRESTİJ</h3><p>Hedeflerine odaklanmış seçkin topluluk.</p></div>
         </div>
     </section>
 
     <section id="kitle" class="section-padding">
-        <div class="section-header" data-aos="fade-up">
-            <h2 class="matrix-text">VÜCUT KİTLE İNDEKSİ</h2>
-            <div class="line"></div>
-        </div>
+        <div class="section-header" data-aos="fade-up"><h2 class="matrix-text">VÜCUT KİTLE İNDEKSİ</h2><div class="line"></div></div>
         <div class="bmi-section" data-aos="fade-up">
             <div>
                 <h3 style="font-family: 'Syncopate'; margin-bottom: 20px; font-size: clamp(1.2rem, 4vw, 1.5rem);">DURUMUNU ÖĞREN</h3>
@@ -492,36 +420,30 @@
                     <div id="bmi-result"></div>
                 </div>
             </div>
-            <div>
-                <img src="https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=2070" style="width: 100%; border-radius: 20px; border: 1px solid var(--border); filter: grayscale(0.5);" alt="BMI" loading="lazy">
-            </div>
+            <div><img src="https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=2070" style="width: 100%; border-radius: 20px; border: 1px solid var(--border); filter: grayscale(0.5);" alt="BMI" loading="lazy"></div>
         </div>
     </section>
 
     <section id="pricing" class="section-padding">
-        <div class="section-header" data-aos="fade-up">
-            <h2 class="matrix-text">ÜYELİK PAKETLERİ</h2>
-            <div class="line"></div>
-        </div>
-
+        <div class="section-header" data-aos="fade-up"><h2 class="matrix-text">ÜYELİK PAKETLERİ</h2><div class="line"></div></div>
         <div class="price-grid">
-            <div class="p-card" data-aos="fade-up">
+            <div class="p-card tilt-card" data-aos="fade-up">
                 <span class="p-type" id="type-1">1 AYLIK</span>
                 <div class="p-val" id="price-1">2.500₺ <span id="span-1">/ Ay</span></div>
                 <ul><li><i class="fas fa-check"></i> Sınırsız Alan Kullanımı</li><li><i class="fas fa-check"></i> Duş & Soyunma Odası</li></ul>
-                <a href="https://wa.me/905321361240?text=1 aylık üyelik hakkında bilgi almak istiyorum." target="_blank" class="btn-join">ŞİMDİ KATIL</a>
+                <a href="javascript:void(0)" onclick="sendWa('Merhaba, 1 aylık üyelik paketi hakkında detaylı bilgi almak istiyorum.')" class="btn-join">ŞİMDİ KATIL</a>
             </div>
-            <div class="p-card" data-aos="fade-up" data-aos-delay="100" style="border-color: var(--primary);">
+            <div class="p-card tilt-card" data-aos="fade-up" data-aos-delay="100" style="border-color: var(--primary);">
                 <span class="p-type" id="type-2">2 AYLIK</span>
                 <div class="p-val" id="price-2">4.500₺ <span id="span-2">/ 2 Ay</span></div>
                 <ul><li><i class="fas fa-check"></i> Sınırsız Alan Kullanımı</li><li><i class="fas fa-check"></i> Duş & Soyunma Odası</li></ul>
-                <a href="https://wa.me/905321361240?text=2 aylık üyelik hakkında bilgi almak istiyorum." target="_blank" class="btn-join">ŞİMDİ KATIL</a>
+                <a href="javascript:void(0)" onclick="sendWa('Merhaba, 2 aylık üyelik paketi hakkında detaylı bilgi almak istiyorum.')" class="btn-join">ŞİMDİ KATIL</a>
             </div>
-            <div class="p-card" data-aos="fade-up" data-aos-delay="200">
+            <div class="p-card tilt-card" data-aos="fade-up" data-aos-delay="200">
                 <span class="p-type" id="type-3">3 AYLIK</span>
                 <div class="p-val" id="price-3">6.500₺ <span id="span-3">/ 3 Ay</span></div>
                 <ul><li><i class="fas fa-check"></i> Sınırsız Alan Kullanımı</li><li><i class="fas fa-check"></i> Duş & Soyunma Odası</li></ul>
-                <a href="https://wa.me/905321361240?text=3 aylık üyelik hakkında bilgi almak istiyorum." target="_blank" class="btn-join">ŞİMDİ KATIL</a>
+                <a href="javascript:void(0)" onclick="sendWa('Merhaba, 3 aylık üyelik paketi hakkında detaylı bilgi almak istiyorum.')" class="btn-join">ŞİMDİ KATIL</a>
             </div>
         </div>
     </section>
@@ -537,26 +459,12 @@
 
     <footer>
         <div class="footer-content">
-            <div>
-                <div class="logo">GYM OF <span>LEGENDS</span></div>
-                <p>Serik'in en kapsamlı salonunda efsanelerin arasında yerinizi alın.</p>
-            </div>
-            <div>
-                <h4>İLETİŞİM</h4>
-                <p style="color: var(--text-dim); margin-bottom: 10px;">Merkez Mah. Tuncer Paşa Cad. No:23<br>Serik / Antalya</p>
-                <p style="color: var(--text-dim);">Tel: 0532 136 12 40</p>
-            </div>
-            <div>
-                <h4>SAATLER</h4>
-                <p style="color: var(--text-dim);">H.İçi: 10:00 - 22:00<br>CMT: 10:00 - 20:00<br><span style="color: #ff4444;">Pazar: KAPALI</span></p>
-            </div>
+            <div><div class="logo">GYM OF <span>LEGENDS</span></div><p>Serik'in en kapsamlı salonunda efsanelerin arasında yerinizi alın.</p></div>
+            <div><h4>İLETİŞİM</h4><p style="color: var(--text-dim); margin-bottom: 10px;">Merkez Mah. Tuncer Paşa Cad. No:23<br>Serik / Antalya</p><p style="color: var(--text-dim);">Tel: 0532 136 12 40</p></div>
+            <div><h4>SAATLER</h4><p style="color: var(--text-dim);">H.İçi: 10:00 - 22:00<br>CMT: 10:00 - 20:00<br><span style="color: #ff4444;">Pazar: KAPALI</span></p></div>
         </div>
-        <div class="map-container" data-aos="fade-up">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3191.132338148785!2d31.1000000!3d36.9166667!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzbCsDU1JzAwLjAiTiAzMcKwMDYnMDAuMCJF!5e0!3m2!1str!2str!4v1625000000000!5m2!1str!2str" allowfullscreen="" loading="lazy"></iframe>
-        </div>
-        <div class="footer-bottom">
-            <div>© 2026 Gym of Legends.</div>
-        </div>
+        <div class="map-container" data-aos="fade-up"><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3191.132338148785!2d31.1000000!3d36.9166667!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzbCsDU1JzAwLjAiTiAzMcKwMDYnMDAuMCJF!5e0!3m2!1str!2str!4v1625000000000!5m2!1str!2str" allowfullscreen="" loading="lazy"></iframe></div>
+        <div class="footer-bottom"><div>© 2026 Gym of Legends.</div></div>
     </footer>
 
     <div id="lightbox" class="lightbox">
@@ -568,6 +476,61 @@
     <script>
         // Animasyonlar
         AOS.init({ duration: 1000, once: true });
+
+        // --- SAF JS 3D TILT EFEKTİ ---
+        if (window.matchMedia("(pointer: fine)").matches) {
+            const tiltCards = document.querySelectorAll('.tilt-card');
+            tiltCards.forEach(card => {
+                // Yansıma efekti için glare divi oluştur
+                let glare = document.createElement('div');
+                glare.classList.add('glare');
+                card.appendChild(glare);
+
+                card.addEventListener('mouseenter', () => {
+                    card.style.transition = 'transform 0.1s ease-out, border-color 0.4s ease, box-shadow 0.4s ease';
+                });
+
+                card.addEventListener('mousemove', e => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left; 
+                    const y = e.clientY - rect.top;
+                    
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    
+                    // Eğilme oranları
+                    const rotateX = ((y - centerY) / centerY) * -10; 
+                    const rotateY = ((x - centerX) / centerX) * 10;
+                    
+                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+                    
+                    glare.style.opacity = '1';
+                    glare.style.background = `radial-gradient(circle at ${x}px ${y}px, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0) 60%)`;
+                });
+                
+                card.addEventListener('mouseleave', () => {
+                    card.style.transition = 'transform 0.5s cubic-bezier(0.23, 1, 0.32, 1), border-color 0.4s ease, box-shadow 0.4s ease';
+                    card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+                    glare.style.opacity = '0';
+                });
+            });
+        }
+
+        // DUYURU BANDI KONTROLÜ
+        function closeAnnouncement() {
+            document.getElementById('announcement-bar').classList.add('closed');
+            document.getElementById('main-header').classList.add('bar-closed');
+            document.getElementById('scroll-progress').classList.add('bar-closed');
+            sessionStorage.setItem('gymBarClosed', 'true');
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            if (sessionStorage.getItem('gymBarClosed') === 'true') {
+                document.getElementById('announcement-bar').style.display = 'none';
+                document.getElementById('main-header').classList.add('bar-closed');
+                document.getElementById('scroll-progress').classList.add('bar-closed');
+            }
+        });
 
         // Yükleme Ekranı
         window.addEventListener('load', () => {
@@ -582,16 +545,13 @@
 
         function toggleMenu() {
             navLinks.classList.toggle('active');
-            
             const isOpen = navLinks.classList.contains('active');
             
             document.body.classList.toggle('menu-open', isOpen);
             document.documentElement.classList.toggle('menu-open', isOpen);
             
-            const elementsToHide = document.querySelectorAll('.occ-card, .wp-float, .ig-float, #scrollToTopBtn');
-            elementsToHide.forEach(el => {
-                el.style.display = isOpen ? 'none' : '';
-            });
+            const elementsToHide = document.querySelectorAll('.occ-card, .wp-float, .ig-float, #scrollToTopBtn, .wa-popup, .announcement-bar');
+            elementsToHide.forEach(el => { el.style.display = isOpen ? 'none' : ''; });
 
             if(isOpen) {
                 hamburgerIcon.classList.remove('fa-bars');
@@ -603,40 +563,38 @@
                 hamburgerBtn.style.transform = 'rotate(0deg)'; 
             }
         }
-
         hamburgerBtn.addEventListener('click', toggleMenu);
-
         document.querySelectorAll('.nav-links a').forEach(link => {
             link.addEventListener('click', () => { 
                 navLinks.classList.remove('active'); 
-                
                 document.body.classList.remove('menu-open'); 
                 document.documentElement.classList.remove('menu-open'); 
-                
                 hamburgerIcon.classList.remove('fa-times');
                 hamburgerIcon.classList.add('fa-bars');
                 hamburgerBtn.style.transform = 'rotate(0deg)';
             });
         });
 
-        // YUKARI ÇIK BUTONU KONTROLÜ
+        // WHATSAPP FONKSİYONLARI
+        function toggleWaPopup() { document.getElementById('waPopup').classList.toggle('show'); }
+        function sendWa(message) {
+            const phone = "905321361240"; 
+            const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+            window.open(url, '_blank');
+            document.getElementById('waPopup').classList.remove('show');
+        }
+
+        // YUKARI ÇIK BUTONU
         const scrollToTopBtn = document.getElementById("scrollToTopBtn");
         window.addEventListener('scroll', () => {
-            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
-                scrollToTopBtn.classList.add("show");
-            } else {
-                scrollToTopBtn.classList.remove("show");
-            }
+            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) scrollToTopBtn.classList.add("show");
+            else scrollToTopBtn.classList.remove("show");
         });
+        scrollToTopBtn.addEventListener('click', () => { window.scrollTo({ top: 0, behavior: 'smooth' }); });
 
-        scrollToTopBtn.addEventListener('click', () => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-
-        // MATRIX (SCRAMBLE) METİN EFEKTİ
+        // MATRIX EFEKTİ
         const scrambleChars = '!<>-_\\\\/[]{}—=+*^?#________';
         const scrambleElements = document.querySelectorAll('.matrix-text');
-        
         const scrambleObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting && !entry.target.dataset.scrambled) {
@@ -659,7 +617,7 @@
         }, { threshold: 0.5 });
         scrambleElements.forEach(el => scrambleObserver.observe(el));
 
-        // Özel İmleç
+        // ÖZEL İMLEÇ
         if (window.matchMedia("(pointer: fine)").matches) {
             const cursorDot = document.querySelector('.cursor-dot');
             const cursorOutline = document.querySelector('.cursor-outline');
@@ -670,7 +628,7 @@
                 cursorOutline.animate({ left: `${posX}px`, top: `${posY}px` }, { duration: 500, fill: "forwards" });
             });
 
-            document.querySelectorAll('a, button, input, .faq-question, .bento-item, .close-lb, .hamburger').forEach(el => {
+            document.querySelectorAll('a, button, input, .faq-question, .bento-item, .close-lb, .hamburger, .wp-float, .wa-option, .close-wa, .close-announcement, .tilt-card').forEach(el => {
                 el.addEventListener('mouseenter', () => {
                     cursorOutline.style.width = '60px'; cursorOutline.style.height = '60px';
                     cursorOutline.style.backgroundColor = 'rgba(255, 102, 0, 0.1)';
@@ -682,7 +640,7 @@
             });
         }
 
-        // Header, Scroll Bar ve Paralaks Efekti
+        // HEADER, PARALAKS VE BENTO GRID
         const heroVideo = document.getElementById('heroVideo');
         const bentoItems = document.querySelectorAll('.bento-item');
 
@@ -697,33 +655,24 @@
             scrollBar.style.width = (winScroll / height) * 100 + "%";
 
             let scrollY = window.scrollY;
-            if (scrollY < window.innerHeight && window.innerWidth > 768) { 
-                heroVideo.style.transform = `translateY(${scrollY * 0.4}px)`; 
-            }
+            if (scrollY < window.innerHeight && window.innerWidth > 768) heroVideo.style.transform = `translateY(${scrollY * 0.4}px)`; 
             
             if (window.innerWidth > 768) {
                 bentoItems.forEach(item => {
                     let speed = item.getAttribute('data-speed');
-                    if(speed) { item.style.transform = `translateY(${scrollY * speed - 50}px)`; }
+                    if(speed) item.style.transform = `translateY(${scrollY * speed - 50}px)`; 
                 });
-            } else {
-                bentoItems.forEach(item => item.style.transform = 'none');
-            }
+            } else { bentoItems.forEach(item => item.style.transform = 'none'); }
         });
 
-        // BENTO GRID
         bentoItems.forEach(item => {
             const video = item.querySelector('.hover-video');
             const img = item.querySelector('img');
-            
             if(video && window.matchMedia("(hover: hover)").matches) {
                 item.addEventListener('mouseenter', () => video.play());
                 item.addEventListener('mouseleave', () => { video.pause(); video.currentTime = 0; });
             }
-            
-            item.addEventListener('click', () => {
-                if(img) openLightbox(img.src);
-            });
+            item.addEventListener('click', () => { if(img) openLightbox(img.src); });
         });
 
         // BMI Hesaplayıcı
@@ -739,9 +688,7 @@
                 else if(bmi >= 30) { durum = "Obezite"; renk = "#ff4444"; }
                 resultDiv.innerHTML = `BMI: ${bmi} <br><span style="font-size:1rem; color:${renk};">${durum}</span>`;
                 resultDiv.style.color = "#fff";
-            } else {
-                resultDiv.innerHTML = "<span style='font-size:1rem; color:#ff4444;'>Lütfen boy ve kilo girin.</span>";
-            }
+            } else { resultDiv.innerHTML = "<span style='font-size:1rem; color:#ff4444;'>Lütfen boy ve kilo girin.</span>"; }
         }
 
         // SSS Akordeon
@@ -759,7 +706,7 @@
         function openLightbox(src) { document.getElementById('lightbox').style.display = "block"; document.getElementById('lightbox-img').src = src; }
         function closeLightbox() { document.getElementById('lightbox').style.display = "none"; }
 
-        // --- SALON YOĞUNLUĞU KONTROLÜ ---
+        // SALON YOĞUNLUĞU API
         const GYM_TEKNO_API_URL = "https://api.gymteknonetwork.com/api/gymoflegends06/geciskontrol/son-gecisler?branch=";
         const SESSION_TOKEN = "ItADhW1EIh:session:GymTekno-9e6d7c1e-85db-4557-9e0b-080440eb8df3";
 
@@ -767,13 +714,9 @@
             if (total > 0 && kadin > 0 && erkek > 0) {
                 let kadinYuzde = (kadin / total) * 100;
                 el.style.background = `conic-gradient(#e91e63 0% ${kadinYuzde}%, #2196f3 ${kadinYuzde}% 100%)`;
-            } else if (total > 0 && kadin > 0) {
-                el.style.background = `conic-gradient(#e91e63 100%, #222 0)`;
-            } else if (total > 0 && erkek > 0) {
-                el.style.background = `conic-gradient(#2196f3 100%, #222 0)`;
-            } else {
-                el.style.background = `#222`;
-            }
+            } else if (total > 0 && kadin > 0) el.style.background = `conic-gradient(#e91e63 100%, #222 0)`;
+            else if (total > 0 && erkek > 0) el.style.background = `conic-gradient(#2196f3 100%, #222 0)`;
+            else el.style.background = `#222`;
         }
 
         function updateDonutChart(total, kadin, erkek) {
@@ -781,23 +724,16 @@
             const cardKadinEl = document.getElementById('occ-card-kadin');
             const cardErkekEl = document.getElementById('occ-card-erkek');
 
-            if (total === 0) {
-                cardCountEl.innerText = '0';
-            } else {
-                let current = 0;
-                let step = Math.ceil(total / 20) || 1;
+            if (total === 0) { cardCountEl.innerText = '0'; } 
+            else {
+                let current = 0; let step = Math.ceil(total / 20) || 1;
                 let timer = setInterval(() => {
                     current += step;
-                    if (current >= total) {
-                        current = total;
-                        clearInterval(timer);
-                    }
+                    if (current >= total) { current = total; clearInterval(timer); }
                     cardCountEl.innerText = current;
                 }, 40);
             }
-
             paintDonut(document.getElementById('occ-card-donut'), total, kadin, erkek);
-
             cardKadinEl.innerText = kadin > 0 ? kadin : '-';
             cardErkekEl.innerText = erkek > 0 ? erkek : '-';
         }
@@ -805,28 +741,17 @@
         async function fetchOccupancyData() {
             try {
                 const response = await fetch(GYM_TEKNO_API_URL + '&_=' + Date.now(), {
-                    method: 'GET',
-                    cache: 'no-store',
-                    headers: {
-                        'x-api-session-token': SESSION_TOKEN,
-                        'Content-Type': 'application/json'
-                    }
+                    method: 'GET', cache: 'no-store', headers: { 'x-api-session-token': SESSION_TOKEN, 'Content-Type': 'application/json' }
                 });
-
                 if (!response.ok) throw new Error("API Hatası");
-
                 const data = await response.json();
                 const yogunluk = data && data.result && data.result.tesisYogunluk;
-
                 if (!yogunluk) throw new Error("tesisYogunluk alanı bulunamadı");
-
                 const kadin = Number(yogunluk.female_count) || 0;
                 const erkek = Number(yogunluk.male_count) || 0;
                 const apiTotal = Number(yogunluk.total_inside) || 0;
                 const total = (apiTotal === kadin + erkek) ? apiTotal : (kadin + erkek);
-
                 updateDonutChart(total, kadin, erkek);
-
             } catch (error) {
                 console.error("Veri çekilemedi:", error);
                 document.getElementById('occ-card-count').innerText = "?";
@@ -834,10 +759,7 @@
         }
 
         window.addEventListener('load', () => {
-            setTimeout(() => {
-                fetchOccupancyData(); 
-                setInterval(fetchOccupancyData, 20000); 
-            }, 1000);
+            setTimeout(() => { fetchOccupancyData(); setInterval(fetchOccupancyData, 20000); }, 1000);
         });
     </script>
 </body>
