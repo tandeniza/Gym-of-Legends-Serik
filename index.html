@@ -327,6 +327,14 @@
             .f-card { padding: 30px 15px; }
             .hero-content { padding: 0 10px; }
         }
+        /* Menü açıldığında kartı ve ikonları gizle */
+body.menu-open .occ-card, 
+body.menu-open .wp-float, 
+body.menu-open .ig-float {
+    display: none !important;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
     </style>
 </head>
 <body>
