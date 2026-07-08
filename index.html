@@ -53,7 +53,7 @@
         #preloader h2 { font-family: 'Syncopate'; font-size: clamp(1.2rem, 4vw, 1.5rem); letter-spacing: 5px; color: #fff; text-align: center; padding: 0 20px; }
         @keyframes pulseDumbbell { 0% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.2); opacity: 1; text-shadow: 0 0 20px var(--primary); } 100% { transform: scale(1); opacity: 0.8; } }
 
-        /* YÜZEN BUTONLAR */
+        /* YÜZEN BUTONLAR (WP & IG) */
         .wp-float, .ig-float {
             position: fixed; right: 20px; width: 60px; height: 60px;
             border-radius: 50px; display: flex; align-items: center; justify-content: center;
@@ -67,91 +67,101 @@
             .ig-float:hover { transform: scale(1.1); filter: brightness(1.1); }
         }
 
-        /* --- YENİ WIDGET TASARIMI (SOL ALT KÖŞE) --- */
-        .live-capacity-widget {
+        /* --- PREMİUM CANLI YOĞUNLUK WIDGET'I (SAĞ ALT) --- */
+        .live-widget-right {
             position: fixed;
-            bottom: 30px;
-            left: 30px;
-            background: rgba(10, 10, 10, 0.85);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 1px solid var(--border);
-            border-left: 3px solid var(--primary);
-            padding: 18px 25px;
-            border-radius: 15px;
+            bottom: 170px; /* IG Butonunun tam üstüne hizalandı (95 + 60 + 15) */
+            right: 20px;
+            width: 180px;
+            background: rgba(12, 12, 12, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 15px;
             z-index: 9998;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.05);
             display: flex;
             flex-direction: column;
-            gap: 8px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+            gap: 12px;
             transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: default;
         }
         
         @media (hover: hover) {
-            .live-capacity-widget:hover {
-                transform: translateY(-5px);
-                border-color: var(--primary);
-                box-shadow: 0 15px 40px rgba(255, 102, 0, 0.2);
+            .live-widget-right:hover {
+                border-color: rgba(255, 102, 0, 0.4);
+                transform: translateY(-3px);
+                box-shadow: 0 15px 40px rgba(0,0,0,0.9), 0 0 20px rgba(255, 102, 0, 0.15);
             }
         }
 
-        .widget-header {
+        .lw-header {
             font-family: 'Syncopate', sans-serif;
-            font-size: 0.65rem;
-            color: var(--text-dim);
-            letter-spacing: 2px;
+            font-size: 0.55rem;
+            color: #aaa;
+            letter-spacing: 1px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
-
-        .widget-header i {
-            color: #ff4444; 
-            font-size: 8px;
+        
+        .pulse-dot {
+            width: 6px; height: 6px; background: #ff4444; border-radius: 50%;
             animation: pulseRed 2s infinite;
         }
 
-        @keyframes pulseRed {
-            0% { transform: scale(0.95); opacity: 0.5; }
-            50% { transform: scale(1.2); opacity: 1; box-shadow: 0 0 10px #ff4444; }
-            100% { transform: scale(0.95); opacity: 0.5; }
+        @keyframes pulseRed { 
+            0% { box-shadow: 0 0 0 0 rgba(255,68,68,0.7); } 
+            70% { box-shadow: 0 0 0 5px rgba(255,68,68,0); } 
+            100% { box-shadow: 0 0 0 0 rgba(255,68,68,0); } 
+        }
+        
+        .lw-body {
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
-        .widget-count {
+        /* Mini Donut Grafik */
+        .lw-chart {
+            width: 50px; height: 50px;
+            border-radius: 50%;
+            background: #222;
+            display: flex; align-items: center; justify-content: center;
+            transition: background 1s ease;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+
+        .lw-inner {
+            width: 38px; height: 38px;
+            background: rgba(12, 12, 12, 1);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        #lw-total {
             font-family: 'Outfit', sans-serif;
-            font-size: 1.8rem;
-            font-weight: 900;
+            font-size: 1.1rem;
+            font-weight: 800;
             color: #fff;
-            line-height: 1;
+        }
+
+        .lw-details {
             display: flex;
-            align-items: baseline;
+            flex-direction: column;
             gap: 6px;
+            flex: 1;
         }
 
-        .widget-count span.lbl {
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: var(--text-dim);
-            letter-spacing: 1px;
+        .lw-item {
+            display: flex; align-items: center; gap: 6px;
+            font-size: 0.75rem; color: #ccc;
         }
 
-        .widget-details {
-            display: flex;
-            gap: 20px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: var(--text-main);
-            margin-top: 5px;
-            padding-top: 10px;
-            border-top: 1px solid var(--border);
-        }
-
-        .w-item { display: flex; align-items: center; gap: 6px; }
-        .w-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; }
-        .w-kadin { background: #e91e63; box-shadow: 0 0 10px rgba(233, 30, 99, 0.5); }
-        .w-erkek { background: #2196f3; box-shadow: 0 0 10px rgba(33, 150, 243, 0.5); }
-
+        .lw-color { width: 6px; height: 6px; border-radius: 50%; }
+        .lw-label { flex: 1; font-weight: 300; }
+        .lw-val { font-weight: 700; color: #fff; }
 
         #scroll-progress { position: fixed; top: 0; left: 0; height: 4px; background: var(--primary); z-index: 2000; width: 0%; }
 
@@ -316,21 +326,23 @@
             .bento-grid { grid-template-columns: 1fr; grid-template-rows: auto; gap: 12px; } 
             .bento-1, .bento-2, .bento-3, .bento-4 { grid-column: span 1; height: 220px; } 
             .cursor-dot, .cursor-outline { display: none !important; } 
+            .bmi-section img { display: none; }
+
+            /* Sosyal Butonlar (Mobilde Küçültme) */
             .wp-float, .ig-float { right: 15px; width: 50px; height: 50px; font-size: 24px;}
             .wp-float { bottom: 15px; }
             .ig-float { bottom: 75px; }
-            .bmi-section img { display: none; }
-            
-            /* Mobilde Widdget'ı Sol Alta Sabitleme ve Küçültme */
-            .live-capacity-widget {
-                bottom: 15px;
-                left: 15px;
-                padding: 10px 15px;
-                gap: 5px;
-                border-radius: 12px;
+
+            /* Widget (Mobil Ayarı) */
+            .live-widget-right {
+                bottom: 140px; /* Mobilde butonların tam üstü */
+                right: 15px;
+                width: 160px;
+                padding: 12px;
             }
-            .widget-count { font-size: 1.3rem; }
-            .widget-details { padding-top: 5px; gap: 12px; font-size: 0.7rem; }
+            .lw-chart { width: 44px; height: 44px; }
+            .lw-inner { width: 34px; height: 34px; }
+            #lw-total { font-size: 1rem; }
         }
 
         @media (max-width: 480px) {
@@ -350,14 +362,28 @@
     <div class="cursor-dot"></div>
     <div class="cursor-outline"></div>
 
-    <div class="live-capacity-widget" id="capacityWidget" data-aos="fade-right" data-aos-delay="1000">
-        <div class="widget-content-left">
-            <div class="widget-header"><i class="fas fa-circle"></i> CANLI YOĞUNLUK</div>
-            <div class="widget-count"><span id="w-total">0</span> <span class="lbl">KİŞİ</span></div>
+    <div class="live-widget-right" id="capacityWidget" data-aos="fade-left" data-aos-delay="1000">
+        <div class="lw-header">
+            <span class="pulse-dot"></span> CANLI DURUM
         </div>
-        <div class="widget-details">
-            <div class="w-item"><span class="w-dot w-kadin"></span> Kadın: <span id="w-kadin">-</span></div>
-            <div class="w-item"><span class="w-dot w-erkek"></span> Erkek: <span id="w-erkek">-</span></div>
+        <div class="lw-body">
+            <div class="lw-chart" id="lw-donut">
+                <div class="lw-inner">
+                    <span id="lw-total">0</span>
+                </div>
+            </div>
+            <div class="lw-details">
+                <div class="lw-item">
+                    <span class="lw-color" style="background:#e91e63;"></span>
+                    <span class="lw-label">Kadın</span>
+                    <span class="lw-val" id="lw-kadin">-</span>
+                </div>
+                <div class="lw-item">
+                    <span class="lw-color" style="background:#2196f3;"></span>
+                    <span class="lw-label">Erkek</span>
+                    <span class="lw-val" id="lw-erkek">-</span>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -373,8 +399,8 @@
             <div class="nav-links" id="nav-links">
                 <a href="#arena">SALON</a>
                 <a href="#pricing">ÜYELİK</a>
-                <a href="#kitle">VKİ</a>
-                <a href="#faq">S.S.S</a>
+                <a href="#kitle">VÜCUT KİTLE İNDEKSİ</a>
+                <a href="#faq">SIKÇA SORULANLAR</a>
             </div>
         </nav>
     </header>
@@ -693,25 +719,30 @@
         function openLightbox(src) { document.getElementById('lightbox').style.display = "block"; document.getElementById('lightbox-img').src = src; }
         function closeLightbox() { document.getElementById('lightbox').style.display = "none"; }
 
-        // --- SALON YOĞUNLUĞU WIDGET KONTROLÜ ---
+        // --- SALON YOĞUNLUĞU WIDGET KONTROLÜ (GELİŞMİŞ VERİ AYIKLAYICI) ---
         const GYM_TEKNO_API_URL = "https://v3alfaapi.gymteknoserver.com/api/gymoflegends06/v1-migration/gecis-yogunluk-analiz";
         const SESSION_TOKEN = "ItADhW1EIh:session:GymTekno-9e6d7c1e-85db-4557-9e0b-080440eb8df3";
 
         function updateWidget(total, kadin, erkek) {
-            const totalEl = document.getElementById('w-total');
-            const kadinEl = document.getElementById('w-kadin');
-            const erkekEl = document.getElementById('w-erkek');
+            const totalEl = document.getElementById('lw-total');
+            const kadinEl = document.getElementById('lw-kadin');
+            const erkekEl = document.getElementById('lw-erkek');
+            const chartEl = document.getElementById('lw-donut');
 
-            // Toplam Sayı Animasyonu
-            if(total === 0) {
+            let safeTotal = Math.max(0, total);
+            let safeKadin = Math.max(0, kadin);
+            let safeErkek = Math.max(0, erkek);
+
+            // Ortadaki Sayı Animasyonu
+            if(safeTotal === 0) {
                 totalEl.innerText = '0';
             } else {
                 let current = 0;
-                let step = Math.ceil(total / 20) || 1;
+                let step = Math.ceil(safeTotal / 20) || 1;
                 let timer = setInterval(() => {
                     current += step;
-                    if(current >= total) {
-                        current = total;
+                    if(current >= safeTotal) {
+                        current = safeTotal;
                         clearInterval(timer);
                     }
                     totalEl.innerText = current;
@@ -719,8 +750,18 @@
             }
 
             // Alt Detayları Güncelle
-            kadinEl.innerText = kadin > 0 ? kadin : (total > 0 ? '-' : '0');
-            erkekEl.innerText = erkek > 0 ? erkek : (total > 0 ? '-' : '0');
+            kadinEl.innerText = safeKadin > 0 ? safeKadin : (safeTotal > 0 ? '-' : '0');
+            erkekEl.innerText = safeErkek > 0 ? safeErkek : (safeTotal > 0 ? '-' : '0');
+
+            // Grafiği Renklendir
+            if (safeTotal > 0 && safeKadin > 0 && safeErkek > 0) {
+                let kadinYuzde = (safeKadin / safeTotal) * 100;
+                chartEl.style.background = `conic-gradient(#e91e63 0% ${kadinYuzde}%, #2196f3 ${kadinYuzde}% 100%)`;
+            } else if (safeTotal > 0) {
+                chartEl.style.background = `conic-gradient(#ff6600 100%, #222 0)`; 
+            } else {
+                chartEl.style.background = `#222`; // Boş (Koyu Gri)
+            }
         }
 
         async function fetchOccupancyData() {
@@ -737,21 +778,26 @@
                 
                 const data = await response.json();
                 
-                // Zeki Veri Ayıklayıcı
                 let result = { t: 0, k: 0, e: 0 };
 
+                // "1 yazma" hatasını çözen güvenlik filtreli arama
                 function searchNumbers(obj) {
                     if (typeof obj !== 'object' || obj === null) return;
                     for (let key in obj) {
                         let k = key.toLowerCase();
                         let val = obj[key];
                         
+                        // Sistem kodlarını yok say (1 hatasının sebebi)
+                        if (k === 'success' || k === 'status' || k === 'code' || k.includes('id') || k.includes('tenant')) {
+                            if (typeof val === 'object') searchNumbers(val);
+                            continue;
+                        }
+                        
                         if (typeof val === 'number' || (typeof val === 'string' && !isNaN(val) && val.trim() !== '')) {
                             let num = Number(val);
-                            if (k.includes('kadin') || k.includes('female') || k === 'k') result.k = num;
-                            else if (k.includes('erkek') || k.includes('male') || k === 'e') result.e = num;
-                            else if (k.includes('toplam') || k.includes('mevcut') || k.includes('total') || k === 't') result.t = num;
-                            else if (result.t === 0) result.t = num; 
+                            if (k.includes('kadin') || k.includes('female')) result.k = num;
+                            else if (k.includes('erkek') || k.includes('male')) result.e = num;
+                            else if (k.includes('toplam') || k.includes('mevcut') || k.includes('total') || k === 'count') result.t = num;
                         } else if (typeof val === 'object') {
                             searchNumbers(val);
                         }
@@ -774,15 +820,14 @@
 
             } catch (error) {
                 console.error("Veri çekilemedi:", error);
-                document.getElementById('w-total').innerText = "?";
-                document.getElementById('w-total').style.color = "#ff4444";
+                document.getElementById('lw-total').innerText = "?";
             }
         }
 
         window.addEventListener('load', () => {
             setTimeout(() => {
                 fetchOccupancyData(); 
-                setInterval(fetchOccupancyData, 300000); // 5 dakikada bir otomatik yenile
+                setInterval(fetchOccupancyData, 300000); 
             }, 1000);
         });
     </script>
