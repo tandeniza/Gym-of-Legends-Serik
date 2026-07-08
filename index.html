@@ -621,13 +621,13 @@
         function openLightbox(src) { document.getElementById('lightbox').style.display = "block"; document.getElementById('lightbox-img').src = src; }
         function closeLightbox() { document.getElementById('lightbox').style.display = "none"; }
 
-       // --- SALON YOĞUNLUĞU KONTROLÜ (GYM TEKNO ENTEGRASYON) ---
+       // --- SALON YOĞUNLUĞU KONTROLÜ (STABİL PROXY & JSON KONTROLÜ) ---
         const BRANCH_ID = "1"; 
         const SESSION_TOKEN = "ItADhW1EIh:session:GymTekno-9e6d7c1e-85db-4557-9e0b-080440eb8df3";
         const GYM_TEKNO_API_URL = `https://v3alfaapi.gymteknoserver.com/api/gymoflegends06/geciskontrol/ai-yogunluk-mevcut/${BRANCH_ID}?sessionToken=${SESSION_TOKEN}`;
         
-        // CORS engelini aşmak için daha stabil bir köprü servisi
-        const PROXY_URL = `https://corsproxy.io/?${encodeURIComponent(GYM_TEKNO_API_URL)}`;
+        // GitHub Pages üzerinde en stabil çalışan AllOrigins GET yöntemi
+        const PROXY_URL = `https://api.allorigins.win/get?url=${encodeURIComponent(GYM_TEKNO_API_URL)}`;
         
         const MAX_CAPACITY = 150; // Salonun maksimum kapasitesini buraya gir
 
@@ -670,27 +670,37 @@
 
         async function fetchOccupancyData() {
             try {
-                // Sadece GitHub Pages (HTTPS) veya Localhost (HTTP) üzerinden çalıştırıldığında fetch başarılı olur
                 const response = await fetch(PROXY_URL);
                 
                 if (!response.ok) {
-                    throw new Error("API yanıt vermedi.");
+                    throw new Error("Proxy sunucusu yanıt vermedi.");
                 }
                 
-                const data = await response.json();
+                const proxyData = await response.json();
                 
-                // Gym Tekno'dan dönebilecek olası veri formatlarını yakalıyoruz
-                let activeCount = data.mevcut || data.count || data.aktif || data.yogunluk || data.data || Number(data);
+                // AllOrigins veriyi "contents" içinde metin olarak döndürür, onu tekrar JSON objesine çeviriyoruz
+                const data = JSON.parse(proxyData.contents);
+                console.log("Gym Tekno'dan Gelen Gerçek Veri:", data); // F12 Konsolunda veriyi görmek için
                 
-                if (activeCount === undefined || isNaN(activeCount)) {
-                     activeCount = 0;
+                let activeCount = 0;
+
+                // Veri formatını tespit edip sayıyı çekiyoruz
+                if (typeof data === 'number') {
+                    activeCount = data;
+                } else if (typeof data === 'string') {
+                    activeCount = Number(data);
+                } else if (data && typeof data === 'object') {
+                    // API objenin içinde farklı bir isimle gönderiyorsa buraya düşer
+                    activeCount = data.mevcut || data.count || data.aktif || data.yogunluk || data.data || data.Result || data.ActiveMembers || 0;
                 }
+
+                if (isNaN(activeCount)) activeCount = 0;
 
                 let calculatedPercent = (activeCount / MAX_CAPACITY) * 100;
                 updateOccupancy(calculatedPercent);
 
             } catch (error) {
-                console.error("Hata:", error);
+                console.error("Detaylı Hata:", error);
                 document.getElementById('occupancy-status').innerText = "HESAPLANAMIYOR";
                 document.getElementById('occupancy-status').style.color = "#888888";
                 document.getElementById('occupancy-bar').style.width = "0%";
@@ -701,7 +711,7 @@
         window.addEventListener('load', () => {
             setTimeout(() => {
                 fetchOccupancyData(); 
-                setInterval(fetchOccupancyData, 300000); // Veriyi 5 dakikada bir otomatik yeniler
+                setInterval(fetchOccupancyData, 300000); // 5 dakikada bir güncelle
             }, 1000);
         });
     </script>
