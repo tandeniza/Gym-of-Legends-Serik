@@ -301,6 +301,7 @@
         <div class="stat-item"><i class="fas fa-medal"></i><h3>2018</h3><p>Kuruluş Yılı</p></div>
     </div>
 
+    <!-- SALON YOĞUNLUĞU BÖLÜMÜ -->
     <section id="yogunluk" class="section-padding" style="padding-top: 20px;">
         <div class="section-header" data-aos="fade-up">
             <h2 class="matrix-text">SALON YOĞUNLUĞU</h2>
@@ -317,9 +318,10 @@
             </div>
             
             <div class="occupancy-stats">
-                <span>%0</span>
-                <span id="occupancy-percent" class="percent-display">%0</span>
-                <span>%100</span>
+                <span>0</span>
+                <!-- BURA GÜNCELLENDİ: %0 YERİNE 0 KİŞİ YAZIYOR -->
+                <span id="occupancy-percent" class="percent-display">0 KİŞİ</span>
+                <span>MAX</span>
             </div>
         </div>
     </section>
@@ -621,31 +623,41 @@
         function openLightbox(src) { document.getElementById('lightbox').style.display = "block"; document.getElementById('lightbox-img').src = src; }
         function closeLightbox() { document.getElementById('lightbox').style.display = "none"; }
 
-      // --- SALON YOĞUNLUĞU KONTROLÜ (DOĞRUDAN BAĞLANTI) ---
+        // --- SALON YOĞUNLUĞU KONTROLÜ (KİŞİ SAYISI GÖSTERİMİ) ---
         const GYM_TEKNO_API_URL = "https://v3alfaapi.gymteknoserver.com/api/gymoflegends06/v1-migration/gecis-yogunluk-analiz";
         const SESSION_TOKEN = "ItADhW1EIh:session:GymTekno-9e6d7c1e-85db-4557-9e0b-080440eb8df3";
         
-        const MAX_CAPACITY = 150; // Salonunun maksimum kapasitesi
+        const MAX_CAPACITY = 150; // Salonunun maksimum kapasitesi (Bar doluluk oranını hesaplamak için kullanılır)
 
-        function updateOccupancy(percent) {
+        function updateOccupancy(activeCount) {
             const bar = document.getElementById('occupancy-bar');
-            const percentText = document.getElementById('occupancy-percent');
+            const countText = document.getElementById('occupancy-percent');
             const statusText = document.getElementById('occupancy-status');
 
-            percent = Math.max(0, Math.min(100, Math.round(percent)));
+            // Bar genişliği için yüzde hesaplama
+            let safeCount = Math.max(0, activeCount);
+            let percent = (safeCount / MAX_CAPACITY) * 100;
+            percent = Math.min(100, percent); // Yüzde 100'ü geçmesini engeller
+            
             bar.style.width = percent + '%';
             
-            let current = 0;
-            let step = Math.ceil(percent / 30) || 1; 
-            let timer = setInterval(() => {
-                current += step;
-                if(current >= percent) {
-                    current = percent;
-                    clearInterval(timer);
-                }
-                percentText.innerText = '%' + current;
-            }, 30);
+            // Sıfırdan yukarı sayma animasyonu (tam kişi sayısı)
+            if (safeCount === 0) {
+                countText.innerText = '0 KİŞİ';
+            } else {
+                let current = 0;
+                let step = Math.ceil(safeCount / 30) || 1; 
+                let timer = setInterval(() => {
+                    current += step;
+                    if(current >= safeCount) {
+                        current = safeCount;
+                        clearInterval(timer);
+                    }
+                    countText.innerText = current + ' KİŞİ';
+                }, 30);
+            }
 
+            // Kapasite oranına göre durum metni belirleme (Sakin, Normal, Yoğun)
             if(percent < 40) {
                 statusText.innerText = "SAKİN";
                 statusText.style.color = "#25d366";
@@ -666,9 +678,6 @@
 
         async function fetchOccupancyData() {
             try {
-                console.log("Gym Tekno'ya doğrudan bağlanılıyor...");
-                
-                // Aracı olmadan, Gym Tekno'nun resmi dökümanındaki gibi doğrudan istek atıyoruz
                 const response = await fetch(GYM_TEKNO_API_URL, {
                     method: 'GET',
                     headers: {
@@ -678,15 +687,14 @@
                 });
                 
                 if (!response.ok) {
-                    console.error("Sunucu Hatası:", response.status);
                     throw new Error("HTTP Hata Kodu: " + response.status);
                 }
                 
                 const data = await response.json();
-                console.log("Gym Tekno'dan Gelen Veri:", data); 
                 
                 let activeCount = 0;
 
+                // Gelen verinin formatına göre sayıyı çekiyoruz
                 if (typeof data === 'number') {
                     activeCount = data;
                 } else if (typeof data === 'string') {
@@ -697,15 +705,13 @@
 
                 if (isNaN(activeCount)) activeCount = 0;
 
-                let calculatedPercent = (activeCount / MAX_CAPACITY) * 100;
-                updateOccupancy(calculatedPercent);
+                updateOccupancy(activeCount); // Tam sayıyı animasyona gönder
 
             } catch (error) {
-                console.error("Bağlantı Başarısız:", error);
                 document.getElementById('occupancy-status').innerText = "HESAPLANAMIYOR";
                 document.getElementById('occupancy-status').style.color = "#888888";
                 document.getElementById('occupancy-bar').style.width = "0%";
-                document.getElementById('occupancy-percent').innerText = "%0";
+                document.getElementById('occupancy-percent').innerText = "? KİŞİ";
             }
         }
 
