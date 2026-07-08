@@ -53,7 +53,7 @@
         #preloader h2 { font-family: 'Syncopate'; font-size: clamp(1.2rem, 4vw, 1.5rem); letter-spacing: 5px; color: #fff; text-align: center; padding: 0 20px; }
         @keyframes pulseDumbbell { 0% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.2); opacity: 1; text-shadow: 0 0 20px var(--primary); } 100% { transform: scale(1); opacity: 0.8; } }
 
-        /* YÜZEN BUTONLAR (WP & IG) */
+        /* YÜZEN BUTONLAR */
         .wp-float, .ig-float {
             position: fixed; right: 20px; width: 60px; height: 60px;
             border-radius: 50px; display: flex; align-items: center; justify-content: center;
@@ -67,101 +67,55 @@
             .ig-float:hover { transform: scale(1.1); filter: brightness(1.1); }
         }
 
-        /* --- PREMİUM CANLI YOĞUNLUK WIDGET'I (SAĞ ALT) --- */
-        .live-widget-right {
-            position: fixed;
-            bottom: 170px; /* IG Butonunun tam üstüne hizalandı (95 + 60 + 15) */
-            right: 20px;
-            width: 180px;
-            background: rgba(12, 12, 12, 0.85);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 16px;
-            padding: 15px;
-            z-index: 9998;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.05);
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            cursor: default;
+        /* CANLI DURUM KARTI (SOSYAL MEDYA İKONLARININ ÜSTÜNDE, HER ZAMAN GÖRÜNÜR) */
+        .occ-card {
+            position: fixed; right: 20px; bottom: 170px; z-index: 9999;
+            background: var(--card-bg); border: 1px solid var(--border); border-radius: 14px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.5); padding: 14px 18px;
+            display: flex; flex-direction: column; gap: 10px;
         }
-        
-        @media (hover: hover) {
-            .live-widget-right:hover {
-                border-color: rgba(255, 102, 0, 0.4);
-                transform: translateY(-3px);
-                box-shadow: 0 15px 40px rgba(0,0,0,0.9), 0 0 20px rgba(255, 102, 0, 0.15);
-            }
+        .occ-card-header { display: flex; align-items: center; gap: 8px; }
+        .occ-live-dot {
+            width: 8px; height: 8px; border-radius: 50%; background: var(--primary);
+            box-shadow: 0 0 8px var(--primary); animation: occPulse 1.5s infinite;
         }
-
-        .lw-header {
-            font-family: 'Syncopate', sans-serif;
-            font-size: 0.55rem;
-            color: #aaa;
-            letter-spacing: 1px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
+        @keyframes occPulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.4); opacity: 0.6; }
+            100% { transform: scale(1); opacity: 1; }
         }
-        
-        .pulse-dot {
-            width: 6px; height: 6px; background: #ff4444; border-radius: 50%;
-            animation: pulseRed 2s infinite;
+        .occ-card-header span.occ-live-label {
+            font-family: 'Outfit', sans-serif; font-size: 0.7rem; font-weight: 700;
+            letter-spacing: 2px; text-transform: uppercase; color: var(--primary);
         }
-
-        @keyframes pulseRed { 
-            0% { box-shadow: 0 0 0 0 rgba(255,68,68,0.7); } 
-            70% { box-shadow: 0 0 0 5px rgba(255,68,68,0); } 
-            100% { box-shadow: 0 0 0 0 rgba(255,68,68,0); } 
-        }
-        
-        .lw-body {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        /* Mini Donut Grafik */
-        .lw-chart {
-            width: 50px; height: 50px;
-            border-radius: 50%;
-            background: #222;
+        .occ-card-body { display: flex; align-items: center; gap: 16px; }
+        .occ-card-donut {
+            width: 62px; height: 62px; border-radius: 50%; background: #222; flex-shrink: 0;
             display: flex; align-items: center; justify-content: center;
-            transition: background 1s ease;
-            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+            transition: background 1s ease-in-out;
         }
-
-        .lw-inner {
-            width: 38px; height: 38px;
-            background: rgba(12, 12, 12, 1);
-            border-radius: 50%;
+        .occ-card-inner {
+            width: 46px; height: 46px; border-radius: 50%; background: var(--card-bg);
             display: flex; align-items: center; justify-content: center;
         }
-
-        #lw-total {
-            font-family: 'Outfit', sans-serif;
-            font-size: 1.1rem;
-            font-weight: 800;
-            color: #fff;
+        #occ-card-count { font-family: 'Outfit', sans-serif; font-size: 1.3rem; font-weight: 900; color: #fff; }
+        .occ-card-legend { display: flex; flex-direction: column; gap: 6px; }
+        .occ-legend-row {
+            display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: var(--text-dim);
+            white-space: nowrap;
         }
+        .occ-legend-row .legend-dot { width: 10px; height: 10px; border-width: 2px; }
+        .occ-legend-row .occ-legend-value { color: #fff; font-weight: 700; margin-left: auto; padding-left: 10px; }
 
-        .lw-details {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            flex: 1;
+        @media (max-width: 480px) {
+            .occ-card { right: 15px; bottom: 140px; padding: 10px 14px; gap: 8px; }
+            .occ-card-body { gap: 12px; }
+            .occ-card-donut { width: 50px; height: 50px; }
+            .occ-card-inner { width: 36px; height: 36px; }
+            #occ-card-count { font-size: 1.05rem; }
+            .occ-live-label { font-size: 0.6rem !important; }
+            .occ-legend-row { font-size: 0.75rem; }
         }
-
-        .lw-item {
-            display: flex; align-items: center; gap: 6px;
-            font-size: 0.75rem; color: #ccc;
-        }
-
-        .lw-color { width: 6px; height: 6px; border-radius: 50%; }
-        .lw-label { flex: 1; font-weight: 300; }
-        .lw-val { font-weight: 700; color: #fff; }
 
         #scroll-progress { position: fixed; top: 0; left: 0; height: 4px; background: var(--primary); z-index: 2000; width: 0%; }
 
@@ -200,6 +154,13 @@
         .stat-item i { font-size: clamp(1.8rem, 4vw, 2.5rem); color: var(--primary); margin-bottom: 15px; }
         .stat-item h3 { font-size: clamp(1.8rem, 4vw, 2.5rem); font-family: 'Syncopate'; margin-bottom: 5px; }
         .stat-item p { color: var(--text-dim); font-size: clamp(0.75rem, 2vw, 0.9rem); text-transform: uppercase; letter-spacing: 2px; }
+
+        /* Popup'ta da kullanılan ortak legend stilleri */
+        .legend-item { display: flex; align-items: center; gap: 10px; }
+        .legend-dot { width: 18px; height: 18px; border: 4px solid; border-radius: 50%; display: inline-block; }
+        .legend-kadin { border-color: #e91e63; } /* Paneldeki pembemsi kırmızı */
+        .legend-erkek { border-color: #2196f3; } /* Paneldeki mavi */
+        .legend-item span { color: #fff; font-weight: 600; font-size: 1.2rem; }
 
         /* KAYAN TİPOGRAFİ BANDI */
         .marquee-container { width: 100%; overflow: hidden; white-space: nowrap; background: var(--primary); padding: 15px 0; margin-bottom: 60px; border-top: 2px solid #000; border-bottom: 2px solid #000; }
@@ -326,23 +287,10 @@
             .bento-grid { grid-template-columns: 1fr; grid-template-rows: auto; gap: 12px; } 
             .bento-1, .bento-2, .bento-3, .bento-4 { grid-column: span 1; height: 220px; } 
             .cursor-dot, .cursor-outline { display: none !important; } 
-            .bmi-section img { display: none; }
-
-            /* Sosyal Butonlar (Mobilde Küçültme) */
-            .wp-float, .ig-float { right: 15px; width: 50px; height: 50px; font-size: 24px;}
+            .wp-float, .ig-float { width: 50px; height: 50px; font-size: 24px; right: 15px; }
             .wp-float { bottom: 15px; }
             .ig-float { bottom: 75px; }
-
-            /* Widget (Mobil Ayarı) */
-            .live-widget-right {
-                bottom: 140px; /* Mobilde butonların tam üstü */
-                right: 15px;
-                width: 160px;
-                padding: 12px;
-            }
-            .lw-chart { width: 44px; height: 44px; }
-            .lw-inner { width: 34px; height: 34px; }
-            #lw-total { font-size: 1rem; }
+            .bmi-section img { display: none; }
         }
 
         @media (max-width: 480px) {
@@ -362,33 +310,27 @@
     <div class="cursor-dot"></div>
     <div class="cursor-outline"></div>
 
-    <div class="live-widget-right" id="capacityWidget" data-aos="fade-left" data-aos-delay="1000">
-        <div class="lw-header">
-            <span class="pulse-dot"></span> CANLI DURUM
+    <a href="https://www.instagram.com/gymoflegendsserikk/" class="ig-float" target="_blank"><i class="fab fa-instagram"></i></a>
+    <a href="https://wa.me/905321361240?text=Merhaba,%20Gym%20of%20Legends%20salonunuz%20ve%20üyelikler%20hakkında%20bilgi%20almak%20istiyorum." class="wp-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
+
+    <!-- CANLI DURUM KARTI (HER ZAMAN GÖRÜNÜR, SOSYAL MEDYA İKONLARININ ÜSTÜNDE) -->
+    <div class="occ-card" id="occ-card">
+        <div class="occ-card-header">
+            <span class="occ-live-dot"></span>
+            <span class="occ-live-label">Salon Yoğunluğu</span>
         </div>
-        <div class="lw-body">
-            <div class="lw-chart" id="lw-donut">
-                <div class="lw-inner">
-                    <span id="lw-total">0</span>
+        <div class="occ-card-body">
+            <div class="occ-card-donut" id="occ-card-donut">
+                <div class="occ-card-inner">
+                    <span id="occ-card-count">0</span>
                 </div>
             </div>
-            <div class="lw-details">
-                <div class="lw-item">
-                    <span class="lw-color" style="background:#e91e63;"></span>
-                    <span class="lw-label">Kadın</span>
-                    <span class="lw-val" id="lw-kadin">-</span>
-                </div>
-                <div class="lw-item">
-                    <span class="lw-color" style="background:#2196f3;"></span>
-                    <span class="lw-label">Erkek</span>
-                    <span class="lw-val" id="lw-erkek">-</span>
-                </div>
+            <div class="occ-card-legend">
+                <div class="occ-legend-row"><span class="legend-dot legend-kadin"></span> Kadın <span class="occ-legend-value" id="occ-card-kadin">-</span></div>
+                <div class="occ-legend-row"><span class="legend-dot legend-erkek"></span> Erkek <span class="occ-legend-value" id="occ-card-erkek">-</span></div>
             </div>
         </div>
     </div>
-
-    <a href="https://www.instagram.com/gymoflegendsserikk/" class="ig-float" target="_blank"><i class="fab fa-instagram"></i></a>
-    <a href="https://wa.me/905321361240?text=Merhaba,%20Gym%20of%20Legends%20salonunuz%20ve%20üyelikler%20hakkında%20bilgi%20almak%20istiyorum." class="wp-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
 
     <div id="scroll-progress"></div>
 
@@ -399,8 +341,8 @@
             <div class="nav-links" id="nav-links">
                 <a href="#arena">SALON</a>
                 <a href="#pricing">ÜYELİK</a>
-                <a href="#kitle">VÜCUT KİTLE İNDEKSİ</a>
-                <a href="#faq">SIKÇA SORULANLAR</a>
+                <a href="#kitle">VKİ</a>
+                <a href="#faq">S.S.S</a>
             </div>
         </nav>
     </header>
@@ -421,6 +363,8 @@
         <div class="stat-item"><i class="fas fa-dumbbell"></i><h3>Pro</h3><p>Kapsamlı Ekipman</p></div>
         <div class="stat-item"><i class="fas fa-medal"></i><h3>2018</h3><p>Kuruluş Yılı</p></div>
     </div>
+
+    <!-- TESİS YOĞUNLUĞU BÖLÜMÜ KALDIRILDI - Artık sağ alttaki yüzen buton/panel kullanılıyor -->
 
     <div class="marquee-container" data-aos="fade-up">
         <div class="marquee-content">
@@ -719,115 +663,94 @@
         function openLightbox(src) { document.getElementById('lightbox').style.display = "block"; document.getElementById('lightbox-img').src = src; }
         function closeLightbox() { document.getElementById('lightbox').style.display = "none"; }
 
-        // --- SALON YOĞUNLUĞU WIDGET KONTROLÜ (GELİŞMİŞ VERİ AYIKLAYICI) ---
-        const GYM_TEKNO_API_URL = "https://v3alfaapi.gymteknoserver.com/api/gymoflegends06/v1-migration/gecis-yogunluk-analiz";
+        // --- SALON YOĞUNLUĞU KONTROLÜ (GERÇEK ANLIK VERİ) ---
+        // NOT: Bu, panelin kendisinin kullandığı GERÇEK "şu an içeride" endpoint'i.
+        // Eski v1-migration/gecis-yogunluk-analiz endpoint'i "günlük/saatlik giriş
+        // istatistiği" veriyordu, anlık doluluk değil — bu yüzden yanlış sayı gösteriyordu.
+        const GYM_TEKNO_API_URL = "https://api.gymteknonetwork.com/api/gymoflegends06/geciskontrol/son-gecisler?branch=";
         const SESSION_TOKEN = "ItADhW1EIh:session:GymTekno-9e6d7c1e-85db-4557-9e0b-080440eb8df3";
 
-        function updateWidget(total, kadin, erkek) {
-            const totalEl = document.getElementById('lw-total');
-            const kadinEl = document.getElementById('lw-kadin');
-            const erkekEl = document.getElementById('lw-erkek');
-            const chartEl = document.getElementById('lw-donut');
+        function paintDonut(el, total, kadin, erkek) {
+            if (total > 0 && kadin > 0 && erkek > 0) {
+                let kadinYuzde = (kadin / total) * 100;
+                el.style.background = `conic-gradient(#e91e63 0% ${kadinYuzde}%, #2196f3 ${kadinYuzde}% 100%)`;
+            } else if (total > 0 && kadin > 0) {
+                el.style.background = `conic-gradient(#e91e63 100%, #222 0)`;
+            } else if (total > 0 && erkek > 0) {
+                el.style.background = `conic-gradient(#2196f3 100%, #222 0)`;
+            } else {
+                el.style.background = `#222`;
+            }
+        }
 
-            let safeTotal = Math.max(0, total);
-            let safeKadin = Math.max(0, kadin);
-            let safeErkek = Math.max(0, erkek);
+        function updateDonutChart(total, kadin, erkek) {
+            const cardCountEl = document.getElementById('occ-card-count');
+            const cardKadinEl = document.getElementById('occ-card-kadin');
+            const cardErkekEl = document.getElementById('occ-card-erkek');
 
-            // Ortadaki Sayı Animasyonu
-            if(safeTotal === 0) {
-                totalEl.innerText = '0';
+            // Ortadaki sayı animasyonu
+            if (total === 0) {
+                cardCountEl.innerText = '0';
             } else {
                 let current = 0;
-                let step = Math.ceil(safeTotal / 20) || 1;
+                let step = Math.ceil(total / 20) || 1;
                 let timer = setInterval(() => {
                     current += step;
-                    if(current >= safeTotal) {
-                        current = safeTotal;
+                    if (current >= total) {
+                        current = total;
                         clearInterval(timer);
                     }
-                    totalEl.innerText = current;
+                    cardCountEl.innerText = current;
                 }, 40);
             }
 
-            // Alt Detayları Güncelle
-            kadinEl.innerText = safeKadin > 0 ? safeKadin : (safeTotal > 0 ? '-' : '0');
-            erkekEl.innerText = safeErkek > 0 ? safeErkek : (safeTotal > 0 ? '-' : '0');
+            paintDonut(document.getElementById('occ-card-donut'), total, kadin, erkek);
 
-            // Grafiği Renklendir
-            if (safeTotal > 0 && safeKadin > 0 && safeErkek > 0) {
-                let kadinYuzde = (safeKadin / safeTotal) * 100;
-                chartEl.style.background = `conic-gradient(#e91e63 0% ${kadinYuzde}%, #2196f3 ${kadinYuzde}% 100%)`;
-            } else if (safeTotal > 0) {
-                chartEl.style.background = `conic-gradient(#ff6600 100%, #222 0)`; 
-            } else {
-                chartEl.style.background = `#222`; // Boş (Koyu Gri)
-            }
+            // Kadın/Erkek sayısı 0 ise "-" göster (ekran görüntüsündeki gibi)
+            cardKadinEl.innerText = kadin > 0 ? kadin : '-';
+            cardErkekEl.innerText = erkek > 0 ? erkek : '-';
         }
 
         async function fetchOccupancyData() {
             try {
-                const response = await fetch(GYM_TEKNO_API_URL, {
+                const response = await fetch(GYM_TEKNO_API_URL + '&_=' + Date.now(), {
                     method: 'GET',
+                    cache: 'no-store',
                     headers: {
                         'x-api-session-token': SESSION_TOKEN,
                         'Content-Type': 'application/json'
                     }
                 });
-                
+
                 if (!response.ok) throw new Error("API Hatası");
-                
+
                 const data = await response.json();
-                
-                let result = { t: 0, k: 0, e: 0 };
 
-                // "1 yazma" hatasını çözen güvenlik filtreli arama
-                function searchNumbers(obj) {
-                    if (typeof obj !== 'object' || obj === null) return;
-                    for (let key in obj) {
-                        let k = key.toLowerCase();
-                        let val = obj[key];
-                        
-                        // Sistem kodlarını yok say (1 hatasının sebebi)
-                        if (k === 'success' || k === 'status' || k === 'code' || k.includes('id') || k.includes('tenant')) {
-                            if (typeof val === 'object') searchNumbers(val);
-                            continue;
-                        }
-                        
-                        if (typeof val === 'number' || (typeof val === 'string' && !isNaN(val) && val.trim() !== '')) {
-                            let num = Number(val);
-                            if (k.includes('kadin') || k.includes('female')) result.k = num;
-                            else if (k.includes('erkek') || k.includes('male')) result.e = num;
-                            else if (k.includes('toplam') || k.includes('mevcut') || k.includes('total') || k === 'count') result.t = num;
-                        } else if (typeof val === 'object') {
-                            searchNumbers(val);
-                        }
-                    }
-                }
+                // Gerçek anlık doluluk verisi burada: result.tesisYogunluk
+                const yogunluk = data && data.result && data.result.tesisYogunluk;
 
-                if (typeof data === 'number') {
-                    result.t = data;
-                } else if (Array.isArray(data) && data.length > 0 && typeof data[0] === 'number') {
-                    result.t = data[0];
-                } else {
-                    searchNumbers(data);
-                }
+                if (!yogunluk) throw new Error("tesisYogunluk alanı bulunamadı");
 
-                if (result.t === 0 && (result.k > 0 || result.e > 0)) {
-                    result.t = result.k + result.e;
-                }
+                const kadin = Number(yogunluk.female_count) || 0;
+                const erkek = Number(yogunluk.male_count) || 0;
+                // total_inside'a da güveniyoruz ama kadın+erkek ile tutarlılık için
+                // ikisini karşılaştırıp, tutmuyorsa kadın+erkek toplamını esas alıyoruz.
+                const apiTotal = Number(yogunluk.total_inside) || 0;
+                const total = (apiTotal === kadin + erkek) ? apiTotal : (kadin + erkek);
 
-                updateWidget(result.t, result.k, result.e);
+                // Grafiği çizdir
+                updateDonutChart(total, kadin, erkek);
 
             } catch (error) {
                 console.error("Veri çekilemedi:", error);
-                document.getElementById('lw-total').innerText = "?";
+                document.getElementById('occ-card-count').innerText = "?";
             }
         }
 
         window.addEventListener('load', () => {
             setTimeout(() => {
                 fetchOccupancyData(); 
-                setInterval(fetchOccupancyData, 300000); 
+                setInterval(fetchOccupancyData, 20000); 
             }, 1000);
         });
     </script>
