@@ -26,6 +26,7 @@
             overflow-x: hidden; 
             width: 100%; 
             position: relative;
+            scroll-behavior: smooth; /* Yumuşak kaydırma için */
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
@@ -39,7 +40,7 @@
         /* ÖZEL İMLEÇ (Sadece Masaüstü) */
         @media (min-width: 768px) {
             body { cursor: none; }
-            a, button, input, .bento-item, .faq-question, .close-lb, .hamburger { cursor: none; }
+            a, button, input, .bento-item, .faq-question, .close-lb, .hamburger, #scrollToTopBtn { cursor: none; }
         }
         
         body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--text-main); line-height: 1.6; }
@@ -69,8 +70,43 @@
         }
         
         @media (hover: hover) {
-            .wp-float { bottom: 150px; }
-            .ig-float { bottom: 215px; }
+            .wp-float:hover { bottom: 150px; }
+            .ig-float:hover { bottom: 215px; }
+        }
+
+        /* YUKARI ÇIK BUTONU (SOL ALTA YERLEŞTİRİLDİ) */
+        #scrollToTopBtn {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 9999;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: #000;
+            border: none;
+            font-size: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #scrollToTopBtn.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        @media (hover: hover) {
+            #scrollToTopBtn:hover {
+                background-color: #fff;
+                transform: translateY(-5px) scale(1.05);
+            }
         }
 
         /* CANLI DURUM KARTI */
@@ -132,11 +168,13 @@
 
             .wp-float { bottom: 150px !important; right: 15px; }
             .ig-float { bottom: 220px !important; right: 15px; }
+            
+            #scrollToTopBtn { bottom: 15px; left: 15px; width: 45px; height: 45px; font-size: 18px; }
         }
 
         #scroll-progress { position: fixed; top: 0; left: 0; height: 4px; background: var(--primary); z-index: 2000; width: 0%; }
 
-        /* HADER & MOBİL MENÜ */
+        /* HEADER & MOBİL MENÜ */
         header { position: fixed; top: 0; width: 100%; z-index: 1000; padding: 20px 0; transition: 0.5s; }
         header.scrolled { background: rgba(0,0,0,0.95); backdrop-filter: blur(20px); padding: 15px 0; border-bottom: 1px solid var(--border); }
         
@@ -145,7 +183,6 @@
         .logo span { color: var(--primary); }
         
         .hamburger { display: none; font-size: 1.8rem; color: var(--primary); cursor: pointer; z-index: 1002; transition: 0.3s; }
-        .close-menu { display: none; }
         
         .nav-links { display: flex; gap: 30px; align-items: center; }
         .nav-links a { color: var(--text-main); text-decoration: none; font-size: 0.75rem; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; transition: 0.3s; position: relative; }
@@ -320,12 +357,13 @@
         /* --- MENÜ AÇIKKEN KAYMAYI KİLİTLEME KODLARI --- */
         html.menu-open, body.menu-open {
             overflow: hidden !important;
-            touch-action: none !important; /* Safari/Chrome'da dokunmatik kaydırmayı kilitler */
+            touch-action: none !important;
         }
         
         body.menu-open .occ-card, 
         body.menu-open .wp-float, 
-        body.menu-open .ig-float {
+        body.menu-open .ig-float,
+        body.menu-open #scrollToTopBtn {
             display: none !important;
         }
     </style>
@@ -342,6 +380,8 @@
 
     <a href="https://www.instagram.com/gymoflegendsserikk/" class="ig-float" target="_blank"><i class="fab fa-instagram"></i></a>
     <a href="https://wa.me/905321361240?text=Merhaba,%20Gym%20of%20Legends%20salonunuz%20ve%20üyelikler%20hakkında%20bilgi%20almak%20istiyorum." class="wp-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
+
+    <button id="scrollToTopBtn" title="Yukarı Çık"><i class="fas fa-arrow-up"></i></button>
 
     <div class="occ-card" id="occ-card">
         <div class="occ-card-header">
@@ -408,22 +448,22 @@
         </div>
         <div class="bento-grid">
             <div class="bento-item bento-1" data-speed="0.05">
-                <img src="gym-of-legends.png" alt="Ana Salon">
-                <video muted loop playsinline class="hover-video">
+                <img src="gym-of-legends.png" alt="Ana Salon" loading="lazy">
+                <video muted loop playsinline preload="none" class="hover-video">
                     <source src="0307.mp4" type="video/mp4">
                 </video>
             </div>
             <div class="bento-item bento-2" data-speed="0.1">
-                <img src="https://images.unsplash.com/photo-1540497077202-7c8a3999166f?q=80&w=2070" alt="Kardiyo">
-                <video muted loop playsinline class="hover-video">
+                <img src="https://images.unsplash.com/photo-1540497077202-7c8a3999166f?q=80&w=2070" alt="Kardiyo" loading="lazy">
+                <video muted loop playsinline preload="none" class="hover-video">
                     <source src="0307.mp4" type="video/mp4">
                 </video>
             </div>
             <div class="bento-item bento-3" data-speed="0.03">
-                <img src="https://images.unsplash.com/photo-1571902943202-507ec2618e8f?q=80&w=1975" alt="Ağırlık">
+                <img src="https://images.unsplash.com/photo-1571902943202-507ec2618e8f?q=80&w=1975" alt="Ağırlık" loading="lazy">
             </div>
             <div class="bento-item bento-4" data-speed="0.07">
-                <img src="https://images.unsplash.com/photo-1593079831268-3381b0db4a77?q=80&w=2069" alt="Dinlenme">
+                <img src="https://images.unsplash.com/photo-1593079831268-3381b0db4a77?q=80&w=2069" alt="Dinlenme" loading="lazy">
             </div>
         </div>
     </section>
@@ -453,7 +493,7 @@
                 </div>
             </div>
             <div>
-                <img src="https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=2070" style="width: 100%; border-radius: 20px; border: 1px solid var(--border); filter: grayscale(0.5);" alt="BMI">
+                <img src="https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=2070" style="width: 100%; border-radius: 20px; border: 1px solid var(--border); filter: grayscale(0.5);" alt="BMI" loading="lazy">
             </div>
         </div>
     </section>
@@ -545,11 +585,10 @@
             
             const isOpen = navLinks.classList.contains('active');
             
-            // Hem body hem html etiketine class ekliyoruz (Safari sorunları için)
             document.body.classList.toggle('menu-open', isOpen);
             document.documentElement.classList.toggle('menu-open', isOpen);
             
-            const elementsToHide = document.querySelectorAll('.occ-card, .wp-float, .ig-float');
+            const elementsToHide = document.querySelectorAll('.occ-card, .wp-float, .ig-float, #scrollToTopBtn');
             elementsToHide.forEach(el => {
                 el.style.display = isOpen ? 'none' : '';
             });
@@ -571,7 +610,6 @@
             link.addEventListener('click', () => { 
                 navLinks.classList.remove('active'); 
                 
-                // Menü kapandığında body ve html etiketinden class silinir
                 document.body.classList.remove('menu-open'); 
                 document.documentElement.classList.remove('menu-open'); 
                 
@@ -579,6 +617,20 @@
                 hamburgerIcon.classList.add('fa-bars');
                 hamburgerBtn.style.transform = 'rotate(0deg)';
             });
+        });
+
+        // YUKARI ÇIK BUTONU KONTROLÜ
+        const scrollToTopBtn = document.getElementById("scrollToTopBtn");
+        window.addEventListener('scroll', () => {
+            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+                scrollToTopBtn.classList.add("show");
+            } else {
+                scrollToTopBtn.classList.remove("show");
+            }
+        });
+
+        scrollToTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         });
 
         // MATRIX (SCRAMBLE) METİN EFEKTİ
