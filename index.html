@@ -1,837 +1,792 @@
-    <!DOCTYPE html>
-    <html lang="tr">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-        <title>Gym of Legends | Serik</title>
-        
-        <link rel="icon" type="image/png" href="favicon.png">
-        
-        <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Outfit:wght@100;300;600;900&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-        <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Gym of Legends | Serik</title>
+    
+    <link rel="icon" type="image/png" href="favicon.png">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Outfit:wght@100;300;600;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
-        <style>
-            :root {
-                --primary: #ff6600;
-                --primary-glow: rgba(255, 102, 0, 0.3);
-                --bg: #050505;
-                --card-bg: #0f0f0f;
-                --border: rgba(255, 255, 255, 0.07);
-                --text-main: #ffffff;
-                --text-dim: #888888;
-            }
-
-            html, body { 
-                overflow-x: hidden; 
-                width: 100%; 
-                position: relative;
-            }
-
-            * { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
-            
-            /* ÖZEL KAYDIRMA ÇUBUĞU */
-            ::-webkit-scrollbar { width: 8px; }
-            ::-webkit-scrollbar-track { background: var(--bg); }
-            ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
-            ::-webkit-scrollbar-thumb:hover { background: #fff; }
-
-            /* ÖZEL İMLEÇ (Sadece Masaüstü) */
-            @media (min-width: 768px) {
-                body { cursor: none; }
-                a, button, input, .bento-item, .faq-question, .close-lb, .hamburger { cursor: none; }
-            }
-            
-            body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--text-main); line-height: 1.6; }
-
-            .cursor-dot { width: 8px; height: 8px; background-color: var(--primary); position: fixed; border-radius: 50%; pointer-events: none; z-index: 999999; transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s, background-color 0.2s; }
-            .cursor-outline { width: 40px; height: 40px; border: 2px solid var(--primary-glow); position: fixed; border-radius: 50%; pointer-events: none; z-index: 999998; transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s, background-color 0.2s, border-color 0.2s; }
-            
-            /* YÜKLEME EKRANI */
-            #preloader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 99999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.8s ease, visibility 0.8s ease; }
-            #preloader i { font-size: 50px; color: var(--primary); margin-bottom: 20px; animation: pulseDumbbell 1.5s infinite; }
-            #preloader h2 { font-family: 'Syncopate'; font-size: clamp(1.2rem, 4vw, 1.5rem); letter-spacing: 5px; color: #fff; text-align: center; padding: 0 20px; }
-            @keyframes pulseDumbbell { 0% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.2); opacity: 1; text-shadow: 0 0 20px var(--primary); } 100% { transform: scale(1); opacity: 0.8; } }
-
-            /* YÜZEN BUTONLAR */
-            .wp-float, .ig-float {
-                position: fixed; right: 20px; width: 60px; height: 60px;
-                border-radius: 50px; display: flex; align-items: center; justify-content: center;
-                font-size: 30px; color: white; z-index: 9999; box-shadow: 0 4px 15px rgba(0,0,0,0.5); transition: 0.3s ease; text-decoration: none;
-            }
-        .wp-float { 
-        bottom: 160px; /* Kartın yüksekliği kadar yukarı */
-        background-color: #25d366; 
-    }
-            .ig-float { 
-        bottom: 245px; /* WhatsApp ikonunun üstü */
-        background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); 
-    }
-            
-            @media (hover: hover) {
-            .wp-float { bottom: 150px; }             /* Kartın üzerine */
-        .ig-float { bottom: 215px; }             /* Onun üzerine */
-            }
-
-            /* CANLI DURUM KARTI (SOSYAL MEDYA İKONLARININ ÜSTÜNDE, HER ZAMAN GÖRÜNÜR) */
-            /* CSS kısmında .occ-card sınıfını güncelleyin */
-    .occ-card {
-        position: fixed; 
-        right: 20px; 
-        bottom: 20px; /* Sosyal medya ikonlarının altına indirmek için bu değeri düşürdük */
-        z-index: 9999;
-        background: var(--card-bg); 
-        border: 1px solid var(--border); 
-        border-radius: 14px;
-        box-shadow: 0 8px 25px rgba(0,0,0,0.5); 
-        padding: 14px 18px;
-        display: flex; 
-        flex-direction: column; 
-        gap: 10px;
-
-            }
-            .occ-card-header { display: flex; align-items: center; gap: 8px; }
-            .occ-live-dot {
-                width: 8px; height: 8px; border-radius: 50%; background: var(--primary);
-                box-shadow: 0 0 8px var(--primary); animation: occPulse 1.5s infinite;
-            }
-            @keyframes occPulse {
-                0% { transform: scale(1); opacity: 1; }
-                50% { transform: scale(1.4); opacity: 0.6; }
-                100% { transform: scale(1); opacity: 1; }
-            }
-            .occ-card-header span.occ-live-label {
-                font-family: 'Outfit', sans-serif; font-size: 0.7rem; font-weight: 700;
-                letter-spacing: 2px; text-transform: uppercase; color: var(--primary);
-            }
-            .occ-card-body { display: flex; align-items: center; gap: 16px; }
-            .occ-card-donut {
-                width: 62px; height: 62px; border-radius: 50%; background: #222; flex-shrink: 0;
-                display: flex; align-items: center; justify-content: center;
-                transition: background 1s ease-in-out;
-            }
-            .occ-card-inner {
-                width: 46px; height: 46px; border-radius: 50%; background: var(--card-bg);
-                display: flex; align-items: center; justify-content: center;
-            }
-            #occ-card-count { font-family: 'Outfit', sans-serif; font-size: 1.3rem; font-weight: 900; color: #fff; }
-            .occ-card-legend { display: flex; flex-direction: column; gap: 6px; }
-            .occ-legend-row {
-                display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: var(--text-dim);
-                white-space: nowrap;
-            }
-            .occ-legend-row .legend-dot { width: 10px; height: 10px; border-width: 2px; }
-            .occ-legend-row .occ-legend-value { color: #fff; font-weight: 700; margin-left: auto; padding-left: 10px; }
-
-        @media (max-width: 480px) {
-        /* Kartı en aşağıya sabitle */
-        .occ-card { 
-            .occ-card { right: 15px; bottom: 15px; } 
-        .occ-card-body { gap: 12px; }
-        .occ-card-donut { width: 50px; height: 50px; }
-        .occ-card-inner { width: 36px; height: 36px; }
-        #occ-card-count { font-size: 1.05rem; }
-        .occ-live-label { font-size: 0.6rem !important; }
-        .occ-legend-row { font-size: 0.75rem; }
+    <style>
+        :root {
+            --primary: #ff6600;
+            --primary-glow: rgba(255, 102, 0, 0.3);
+            --bg: #050505;
+            --card-bg: #0f0f0f;
+            --border: rgba(255, 255, 255, 0.07);
+            --text-main: #ffffff;
+            --text-dim: #888888;
         }
 
-        /* İkonları kartın üzerine, aralarında boşluk bırakarak yerleştir */
+        html, body { 
+            overflow-x: hidden; 
+            width: 100%; 
+            position: relative;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
+        
+        /* ÖZEL KAYDIRMA ÇUBUĞU */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #fff; }
+
+        /* ÖZEL İMLEÇ (Sadece Masaüstü) */
+        @media (min-width: 768px) {
+            body { cursor: none; }
+            a, button, input, .bento-item, .faq-question, .close-lb, .hamburger { cursor: none; }
+        }
+        
+        body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--text-main); line-height: 1.6; }
+
+        .cursor-dot { width: 8px; height: 8px; background-color: var(--primary); position: fixed; border-radius: 50%; pointer-events: none; z-index: 999999; transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s, background-color 0.2s; }
+        .cursor-outline { width: 40px; height: 40px; border: 2px solid var(--primary-glow); position: fixed; border-radius: 50%; pointer-events: none; z-index: 999998; transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s, background-color 0.2s, border-color 0.2s; }
+        
+        /* YÜKLEME EKRANI */
+        #preloader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 99999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.8s ease, visibility 0.8s ease; }
+        #preloader i { font-size: 50px; color: var(--primary); margin-bottom: 20px; animation: pulseDumbbell 1.5s infinite; }
+        #preloader h2 { font-family: 'Syncopate'; font-size: clamp(1.2rem, 4vw, 1.5rem); letter-spacing: 5px; color: #fff; text-align: center; padding: 0 20px; }
+        @keyframes pulseDumbbell { 0% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.2); opacity: 1; text-shadow: 0 0 20px var(--primary); } 100% { transform: scale(1); opacity: 0.8; } }
+
+        /* YÜZEN BUTONLAR */
+        .wp-float, .ig-float {
+            position: fixed; right: 20px; width: 60px; height: 60px;
+            border-radius: 50px; display: flex; align-items: center; justify-content: center;
+            font-size: 30px; color: white; z-index: 9999; box-shadow: 0 4px 15px rgba(0,0,0,0.5); transition: 0.3s ease; text-decoration: none;
+        }
         .wp-float { 
-            bottom: 150px !important; /* Kartın yüksekliğinden daha yukarı */
-            right: 15px; 
+            bottom: 160px; 
+            background-color: #25d366; 
         }
         .ig-float { 
-            bottom: 220px !important; /* WP'nin de üzerine */
-            right: 15px; 
+            bottom: 245px; 
+            background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); 
         }
-    }
-
-            #scroll-progress { position: fixed; top: 0; left: 0; height: 4px; background: var(--primary); z-index: 2000; width: 0%; }
-    E
-            /* HADER & MOBİL MENÜ */
-            header { position: fixed; top: 0; width: 100%; z-index: 1000; padding: 20px 0; transition: 0.5s; }
-            header.scrolled { background: rgba(0,0,0,0.95); backdrop-filter: blur(20px); padding: 15px 0; border-bottom: 1px solid var(--border); }
-            
-            nav { max-width: 1400px; margin: 0 auto; padding: 0 5%; display: flex; justify-content: space-between; align-items: center; }
-            .logo { font-family: 'Syncopate', sans-serif; font-size: clamp(1.1rem, 3vw, 1.3rem); font-weight: 700; letter-spacing: 2px; cursor: pointer; z-index: 1002; position: relative; }
-            .logo span { color: var(--primary); }
-            
-            .hamburger { display: none; font-size: 1.8rem; color: var(--primary); cursor: pointer; z-index: 1002; transition: 0.3s; }
-            .close-menu { display: none; }
-            
-            .nav-links { display: flex; gap: 30px; align-items: center; }
-            .nav-links a { color: var(--text-main); text-decoration: none; font-size: 0.75rem; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; transition: 0.3s; position: relative; }
-            .nav-links a::after { content: ''; position: absolute; bottom: -5px; left: 0; width: 0; height: 2px; background: var(--primary); transition: 0.3s; }
-            
-            @media (hover: hover) {
-                .nav-links a:hover::after { width: 100%; }
-            }
-
-            /* VİDEO HERO BÖLÜMÜ */
-            .hero { height: 100vh; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; width: 100%; }
-            .hero-video { position: absolute; top: -2.5%; left: 0; width: 100%; height: 105%; object-fit: cover; z-index: 1; filter: brightness(0.4) contrast(1.2); transition: transform 0.1s linear; }
-            
-            .hero-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, #050505 100%); z-index: 2; }
-            .hero-content { z-index: 5; text-align: center; pointer-events: none; width: 100%; padding: 0 20px; }
-            .hero h1 { font-family: 'Syncopate', sans-serif; font-size: clamp(2rem, 10vw, 8rem); line-height: 1.1; font-weight: 700; text-transform: uppercase; margin-bottom: 20px; text-shadow: 0 10px 30px rgba(0,0,0,0.8); }
-            .hero-sub { color: var(--primary); font-weight: 300; letter-spacing: clamp(3px, 2vw, 15px); font-size: clamp(0.7rem, 2vw, 1rem); text-transform: uppercase; margin-bottom: 10px; }
-
-            /* İSTATİSTİKLER */
-            .stats-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 20px; max-width: 1200px; margin: -60px 5% 60px; padding: 40px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px; position: relative; z-index: 10; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
-            @media(min-width: 1200px){ .stats-container { margin-left: auto; margin-right: auto; } }
-            .stat-item { text-align: center; }
-            .stat-item i { font-size: clamp(1.8rem, 4vw, 2.5rem); color: var(--primary); margin-bottom: 15px; }
-            .stat-item h3 { font-size: clamp(1.8rem, 4vw, 2.5rem); font-family: 'Syncopate'; margin-bottom: 5px; }
-            .stat-item p { color: var(--text-dim); font-size: clamp(0.75rem, 2vw, 0.9rem); text-transform: uppercase; letter-spacing: 2px; }
-
-            /* Popup'ta da kullanılan ortak legend stilleri */
-            .legend-item { display: flex; align-items: center; gap: 10px; }
-            .legend-dot { width: 18px; height: 18px; border: 4px solid; border-radius: 50%; display: inline-block; }
-            .legend-kadin { border-color: #e91e63; } /* Paneldeki pembemsi kırmızı */
-            .legend-erkek { border-color: #2196f3; } /* Paneldeki mavi */
-            .legend-item span { color: #fff; font-weight: 600; font-size: 1.2rem; }
-
-            /* KAYAN TİPOGRAFİ BANDI */
-            .marquee-container { width: 100%; overflow: hidden; white-space: nowrap; background: var(--primary); padding: 15px 0; margin-bottom: 60px; border-top: 2px solid #000; border-bottom: 2px solid #000; }
-            .marquee-content { display: inline-block; font-family: 'Syncopate', sans-serif; font-weight: 900; font-size: 1.2rem; color: #000; letter-spacing: 3px; animation: marqueeAnim 25s linear infinite; }
-            .marquee-content span { margin: 0 20px; display: inline-flex; align-items: center; gap: 10px; }
-            .marquee-content i { font-size: 1rem; }
-            @keyframes marqueeAnim { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-
-            /* ORTAK BAŞLIK YAPISI */
-            .section-padding { padding: 80px 5%; max-width: 1400px; margin: 0 auto; width: 100%; }
-            .section-header { margin-bottom: 50px; text-align: center; }
-            .section-header h2 { font-family: 'Syncopate'; font-size: clamp(1.5rem, 5vw, 2.5rem); margin-bottom: 10px; text-transform: uppercase; }
-            .section-header .line { width: 80px; height: 4px; background: var(--primary); margin: 0 auto; }
-
-            /* GALERİ (BENTO GRID) */
-            .bento-grid { display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(2, 350px); gap: 15px; }
-            .bento-item { position: relative; overflow: hidden; border-radius: 12px; border: 1px solid var(--border); cursor: pointer; transition: transform 0.1s linear; background: #000; }
-            .bento-item img { width: 100%; height: 100%; object-fit: cover; transition: 0.8s; filter: grayscale(0.8); z-index: 1; position: relative; }
-            .bento-item .hover-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 2; opacity: 0; transition: opacity 0.4s ease; pointer-events: none; }
-            
-            @media (hover: hover) {
-                .bento-item:hover img { transform: scale(1.05); filter: grayscale(0); }
-                .bento-item:hover .hover-video { opacity: 1; } 
-            }
-            
-            .bento-1 { grid-column: span 2; grid-row: span 2; }
-            .bento-2 { grid-column: span 2; }
-            .bento-3 { grid-column: span 1; }
-            .bento-4 { grid-column: span 1; }
-            
-            /* LIGHTBOX */
-            .lightbox { display: none; position: fixed; z-index: 100000; padding-top: 80px; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.95); backdrop-filter: blur(5px); }
-            .lightbox-content { margin: auto; display: block; max-width: 95%; max-height: 80vh; border-radius: 10px; box-shadow: 0 0 50px rgba(255,102,0,0.2); animation: zoom 0.3s ease; object-fit: contain; }
-            .close-lb { position: absolute; top: 20px; right: 30px; color: #fff; font-size: 40px; font-weight: bold; cursor: pointer; transition: 0.3s; z-index: 100001; }
-            
-            @media (hover: hover) {
-                .close-lb:hover { color: var(--primary); }
-            }
-            @keyframes zoom { from {transform:scale(0)} to {transform:scale(1)} }
-
-            /* HİZMETLER */
-            .features { background: #080808; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
-            .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px; }
-            .f-card { padding: 40px 20px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 15px; transition: 0.4s; text-align: center; }
-            
-            @media (hover: hover) {
-                .f-card:hover { border-color: var(--primary); transform: translateY(-5px); }
-            }
-            .f-card i { font-size: 2.5rem; color: var(--primary); margin-bottom: 25px; }
-            .f-card h3 { font-family: 'Syncopate'; font-size: 1rem; margin-bottom: 15px; }
-            .f-card p { color: var(--text-dim); font-size: 0.95rem; }
-
-            /* VÜCUT KİTLE İNDEKSİ (BMI) */
-            .bmi-section { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
-            .bmi-box { background: var(--card-bg); padding: 30px 20px; border-radius: 20px; border: 1px solid var(--border); }
-            .bmi-input { width: 100%; padding: 15px; background: #050505; border: 1px solid var(--border); color: #fff; border-radius: 8px; margin-bottom: 15px; font-family: 'Outfit'; font-size: 1rem; }
-            .bmi-input:focus { border-color: var(--primary); }
-            .btn-calc { width: 100%; padding: 15px; background: var(--primary); color: #000; border: none; border-radius: 8px; font-weight: 900; font-size: 1rem; cursor: pointer; transition: 0.3s; letter-spacing: 2px; }
-            
-            @media (hover: hover) {
-                .btn-calc:hover { background: #fff; }
-            }
-            #bmi-result { margin-top: 20px; font-size: 1.1rem; font-weight: 700; color: var(--primary); text-align: center; line-height: 1.4; }
-
-            /* FİYATLANDIRMA */
-            .price-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px; }
-            .p-card { background: #0c0c0c; padding: 40px 20px; border-radius: 20px; border: 1px solid var(--border); position: relative; transition: 0.4s; text-align: center; }
-            
-            @media (hover: hover) {
-                .p-card:hover { border-color: var(--primary); }
-            }
-            .p-card .p-type { font-family: 'Syncopate'; font-size: 0.8rem; color: var(--primary); margin-bottom: 20px; display: block; letter-spacing: 3px; }
-            .p-card .p-val { font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 900; margin-bottom: 25px; line-height: 1; }
-            .p-card .p-val span { font-size: 1rem; color: var(--text-dim); }
-            .p-card ul { list-style: none; margin-bottom: 30px; text-align: left; padding: 0 10px; }
-            .p-card ul li { margin-bottom: 15px; color: var(--text-dim); display: flex; align-items: center; gap: 10px; font-size: 0.85rem; }
-            .p-card ul li i { color: var(--primary); font-size: 0.8rem; flex-shrink: 0; }
-            .btn-join { display: block; width: 100%; padding: 16px; background: var(--primary); color: #000; text-decoration: none; font-weight: 900; letter-spacing: 2px; border-radius: 8px; transition: 0.3s; font-size: 0.9rem; }
-            
-            @media (hover: hover) {
-                .btn-join:hover { background: #fff; transform: scale(1.02); }
-            }
-
-            /* SSS AKORDEON */
-            .faq-section { max-width: 900px; margin: 0 auto; width: 100%; }
-            .faq-item { background: var(--card-bg); margin-bottom: 15px; border-radius: 10px; border: 1px solid var(--border); overflow: hidden; transition: 0.3s; }
-            .faq-question { padding: 18px 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 600; letter-spacing: 1px; font-size: clamp(0.85rem, 2vw, 0.95rem); }
-            .faq-question span { padding-right: 15px; }
-            .faq-question i { color: var(--primary); transition: 0.3s; flex-shrink: 0; }
-            .faq-answer { padding: 0 20px; max-height: 0; overflow: hidden; transition: 0.4s ease; color: var(--text-dim); font-size: 0.9rem; }
-            .faq-item.active .faq-answer { padding-bottom: 20px; max-height: 300px; }
-            .faq-item.active .faq-question i { transform: rotate(180deg); }
-
-            /* FOOTER & MAP */
-            footer { padding: 60px 5% 30px; background: #000; width: 100%; overflow: hidden; }
-            .footer-content { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px; }
-            .footer-logo p { color: var(--text-dim); max-width: 400px; margin-top: 15px; font-size: 0.9rem; }
-            .footer-links h4 { font-family: 'Syncopate'; font-size: 0.8rem; color: var(--primary); margin-bottom: 20px; }
-            .map-container { max-width: 1400px; margin: 50px auto 0; border-radius: 20px; overflow: hidden; border: 1px solid var(--border); filter: grayscale(1) invert(0.92); transition: 0.5s; width: 100%; }
-            
-            @media (hover: hover) {
-                .map-container:hover { filter: grayscale(0.5) invert(0); }
-            }
-            .map-container iframe { display: block; width: 100%; height: clamp(250px, 40vw, 350px); border: 0; }
-            .footer-bottom { text-align: center; margin-top: 50px; padding-top: 20px; border-top: 1px solid var(--border); font-size: 0.8rem; color: var(--text-dim); }
-
-            /* === MOBİL UYUM (RESPONSIVE) KODLARI === */
-            @media (max-width: 1024px) { 
-                .footer-content { grid-template-columns: 1fr; text-align: center; } 
-                .footer-logo p { margin: 15px auto 0; }
-                .bmi-section { grid-template-columns: 1fr; text-align: center; } 
-                .bento-grid { grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(2, 250px); } 
-                .bento-1, .bento-2 { grid-column: span 2; } 
-                .bento-3, .bento-4 { grid-column: span 1; } 
-            }
-            
-            @media (max-width: 768px) { 
-        .hamburger { display: block; }
-        .nav-links { position: fixed; top: 0; right: -100%; height: 100vh; width: 100%; max-width: 400px; background: rgba(5, 5, 5, 0.98); backdrop-filter: blur(15px); flex-direction: column; justify-content: center; align-items: center; transition: 0.4s cubic-bezier(0.77, 0, 0.175, 1); z-index: 1001; border-left: 1px solid var(--border); }
-        .nav-links.active { right: 0; box-shadow: -10px 0 50px rgba(0,0,0,0.8); }
-        .nav-links a { font-size: 1.5rem; margin: 20px 0; display: block; }
-        .section-padding { padding: 50px 5%; }
-        .stats-container { margin: -30px 5% 40px; padding: 25px; grid-template-columns: 1fr; gap: 30px; border-radius: 15px; }
-        .bento-grid { grid-template-columns: 1fr; grid-template-rows: auto; gap: 12px; } 
-        .bento-1, .bento-2, .bento-3, .bento-4 { grid-column: span 1; height: 220px; } 
-        .cursor-dot, .cursor-outline { display: none !important; } 
         
-        /* İKON VE KART KONUMLARI (MOBİL İÇİN) */
-        .wp-float, .ig-float { width: 50px; height: 50px; font-size: 24px; right: 15px; }
-        .wp-float { bottom: 130px; } /* Kartın üzerine çıktılar */
-        .ig-float { bottom: 190px; }
+        @media (hover: hover) {
+            .wp-float { bottom: 150px; }
+            .ig-float { bottom: 215px; }
+        }
+
+        /* CANLI DURUM KARTI */
+        .occ-card {
+            position: fixed; 
+            right: 20px; 
+            bottom: 20px; 
+            z-index: 9999;
+            background: var(--card-bg); 
+            border: 1px solid var(--border); 
+            border-radius: 14px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.5); 
+            padding: 14px 18px;
+            display: flex; 
+            flex-direction: column; 
+            gap: 10px;
+        }
+        .occ-card-header { display: flex; align-items: center; gap: 8px; }
+        .occ-live-dot {
+            width: 8px; height: 8px; border-radius: 50%; background: var(--primary);
+            box-shadow: 0 0 8px var(--primary); animation: occPulse 1.5s infinite;
+        }
+        @keyframes occPulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.4); opacity: 0.6; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .occ-card-header span.occ-live-label {
+            font-family: 'Outfit', sans-serif; font-size: 0.7rem; font-weight: 700;
+            letter-spacing: 2px; text-transform: uppercase; color: var(--primary);
+        }
+        .occ-card-body { display: flex; align-items: center; gap: 16px; }
+        .occ-card-donut {
+            width: 62px; height: 62px; border-radius: 50%; background: #222; flex-shrink: 0;
+            display: flex; align-items: center; justify-content: center;
+            transition: background 1s ease-in-out;
+        }
+        .occ-card-inner {
+            width: 46px; height: 46px; border-radius: 50%; background: var(--card-bg);
+            display: flex; align-items: center; justify-content: center;
+        }
+        #occ-card-count { font-family: 'Outfit', sans-serif; font-size: 1.3rem; font-weight: 900; color: #fff; }
+        .occ-card-legend { display: flex; flex-direction: column; gap: 6px; }
+        .occ-legend-row {
+            display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: var(--text-dim);
+            white-space: nowrap;
+        }
+        .occ-legend-row .legend-dot { width: 10px; height: 10px; border-width: 2px; }
+        .occ-legend-row .occ-legend-value { color: #fff; font-weight: 700; margin-left: auto; padding-left: 10px; }
+
+        @media (max-width: 480px) {
+            .occ-card { right: 15px; bottom: 15px; } 
+            .occ-card-body { gap: 12px; }
+            .occ-card-donut { width: 50px; height: 50px; }
+            .occ-card-inner { width: 36px; height: 36px; }
+            #occ-card-count { font-size: 1.05rem; }
+            .occ-live-label { font-size: 0.6rem !important; }
+            .occ-legend-row { font-size: 0.75rem; }
+
+            .wp-float { bottom: 150px !important; right: 15px; }
+            .ig-float { bottom: 220px !important; right: 15px; }
+        }
+
+        #scroll-progress { position: fixed; top: 0; left: 0; height: 4px; background: var(--primary); z-index: 2000; width: 0%; }
+
+        /* HADER & MOBİL MENÜ */
+        header { position: fixed; top: 0; width: 100%; z-index: 1000; padding: 20px 0; transition: 0.5s; }
+        header.scrolled { background: rgba(0,0,0,0.95); backdrop-filter: blur(20px); padding: 15px 0; border-bottom: 1px solid var(--border); }
         
-        /* MENÜ AÇILINCA GİZLEME (BU KOD EK SİHİRDİR) */
+        nav { max-width: 1400px; margin: 0 auto; padding: 0 5%; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-family: 'Syncopate', sans-serif; font-size: clamp(1.1rem, 3vw, 1.3rem); font-weight: 700; letter-spacing: 2px; cursor: pointer; z-index: 1002; position: relative; }
+        .logo span { color: var(--primary); }
+        
+        .hamburger { display: none; font-size: 1.8rem; color: var(--primary); cursor: pointer; z-index: 1002; transition: 0.3s; }
+        .close-menu { display: none; }
+        
+        .nav-links { display: flex; gap: 30px; align-items: center; }
+        .nav-links a { color: var(--text-main); text-decoration: none; font-size: 0.75rem; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; transition: 0.3s; position: relative; }
+        .nav-links a::after { content: ''; position: absolute; bottom: -5px; left: 0; width: 0; height: 2px; background: var(--primary); transition: 0.3s; }
+        
+        @media (hover: hover) {
+            .nav-links a:hover::after { width: 100%; }
+        }
+
+        /* VİDEO HERO BÖLÜMÜ */
+        .hero { height: 100vh; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; width: 100%; }
+        .hero-video { position: absolute; top: -2.5%; left: 0; width: 100%; height: 105%; object-fit: cover; z-index: 1; filter: brightness(0.4) contrast(1.2); transition: transform 0.1s linear; }
+        
+        .hero-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, #050505 100%); z-index: 2; }
+        .hero-content { z-index: 5; text-align: center; pointer-events: none; width: 100%; padding: 0 20px; }
+        .hero h1 { font-family: 'Syncopate', sans-serif; font-size: clamp(2rem, 10vw, 8rem); line-height: 1.1; font-weight: 700; text-transform: uppercase; margin-bottom: 20px; text-shadow: 0 10px 30px rgba(0,0,0,0.8); }
+        .hero-sub { color: var(--primary); font-weight: 300; letter-spacing: clamp(3px, 2vw, 15px); font-size: clamp(0.7rem, 2vw, 1rem); text-transform: uppercase; margin-bottom: 10px; }
+
+        /* İSTATİSTİKLER */
+        .stats-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 20px; max-width: 1200px; margin: -60px 5% 60px; padding: 40px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px; position: relative; z-index: 10; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+        @media(min-width: 1200px){ .stats-container { margin-left: auto; margin-right: auto; } }
+        .stat-item { text-align: center; }
+        .stat-item i { font-size: clamp(1.8rem, 4vw, 2.5rem); color: var(--primary); margin-bottom: 15px; }
+        .stat-item h3 { font-size: clamp(1.8rem, 4vw, 2.5rem); font-family: 'Syncopate'; margin-bottom: 5px; }
+        .stat-item p { color: var(--text-dim); font-size: clamp(0.75rem, 2vw, 0.9rem); text-transform: uppercase; letter-spacing: 2px; }
+
+        .legend-item { display: flex; align-items: center; gap: 10px; }
+        .legend-dot { width: 18px; height: 18px; border: 4px solid; border-radius: 50%; display: inline-block; }
+        .legend-kadin { border-color: #e91e63; }
+        .legend-erkek { border-color: #2196f3; }
+        .legend-item span { color: #fff; font-weight: 600; font-size: 1.2rem; }
+
+        /* KAYAN TİPOGRAFİ BANDI */
+        .marquee-container { width: 100%; overflow: hidden; white-space: nowrap; background: var(--primary); padding: 15px 0; margin-bottom: 60px; border-top: 2px solid #000; border-bottom: 2px solid #000; }
+        .marquee-content { display: inline-block; font-family: 'Syncopate', sans-serif; font-weight: 900; font-size: 1.2rem; color: #000; letter-spacing: 3px; animation: marqueeAnim 25s linear infinite; }
+        .marquee-content span { margin: 0 20px; display: inline-flex; align-items: center; gap: 10px; }
+        .marquee-content i { font-size: 1rem; }
+        @keyframes marqueeAnim { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+        /* ORTAK BAŞLIK YAPISI */
+        .section-padding { padding: 80px 5%; max-width: 1400px; margin: 0 auto; width: 100%; }
+        .section-header { margin-bottom: 50px; text-align: center; }
+        .section-header h2 { font-family: 'Syncopate'; font-size: clamp(1.5rem, 5vw, 2.5rem); margin-bottom: 10px; text-transform: uppercase; }
+        .section-header .line { width: 80px; height: 4px; background: var(--primary); margin: 0 auto; }
+
+        /* GALERİ (BENTO GRID) */
+        .bento-grid { display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(2, 350px); gap: 15px; }
+        .bento-item { position: relative; overflow: hidden; border-radius: 12px; border: 1px solid var(--border); cursor: pointer; transition: transform 0.1s linear; background: #000; }
+        .bento-item img { width: 100%; height: 100%; object-fit: cover; transition: 0.8s; filter: grayscale(0.8); z-index: 1; position: relative; }
+        .bento-item .hover-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 2; opacity: 0; transition: opacity 0.4s ease; pointer-events: none; }
+        
+        @media (hover: hover) {
+            .bento-item:hover img { transform: scale(1.05); filter: grayscale(0); }
+            .bento-item:hover .hover-video { opacity: 1; } 
+        }
+        
+        .bento-1 { grid-column: span 2; grid-row: span 2; }
+        .bento-2 { grid-column: span 2; }
+        .bento-3 { grid-column: span 1; }
+        .bento-4 { grid-column: span 1; }
+        
+        /* LIGHTBOX */
+        .lightbox { display: none; position: fixed; z-index: 100000; padding-top: 80px; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.95); backdrop-filter: blur(5px); }
+        .lightbox-content { margin: auto; display: block; max-width: 95%; max-height: 80vh; border-radius: 10px; box-shadow: 0 0 50px rgba(255,102,0,0.2); animation: zoom 0.3s ease; object-fit: contain; }
+        .close-lb { position: absolute; top: 20px; right: 30px; color: #fff; font-size: 40px; font-weight: bold; cursor: pointer; transition: 0.3s; z-index: 100001; }
+        
+        @media (hover: hover) {
+            .close-lb:hover { color: var(--primary); }
+        }
+        @keyframes zoom { from {transform:scale(0)} to {transform:scale(1)} }
+
+        /* HİZMETLER */
+        .features { background: #080808; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+        .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px; }
+        .f-card { padding: 40px 20px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 15px; transition: 0.4s; text-align: center; }
+        
+        @media (hover: hover) {
+            .f-card:hover { border-color: var(--primary); transform: translateY(-5px); }
+        }
+        .f-card i { font-size: 2.5rem; color: var(--primary); margin-bottom: 25px; }
+        .f-card h3 { font-family: 'Syncopate'; font-size: 1rem; margin-bottom: 15px; }
+        .f-card p { color: var(--text-dim); font-size: 0.95rem; }
+
+        /* VÜCUT KİTLE İNDEKSİ (BMI) */
+        .bmi-section { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
+        .bmi-box { background: var(--card-bg); padding: 30px 20px; border-radius: 20px; border: 1px solid var(--border); }
+        .bmi-input { width: 100%; padding: 15px; background: #050505; border: 1px solid var(--border); color: #fff; border-radius: 8px; margin-bottom: 15px; font-family: 'Outfit'; font-size: 1rem; }
+        .bmi-input:focus { border-color: var(--primary); }
+        .btn-calc { width: 100%; padding: 15px; background: var(--primary); color: #000; border: none; border-radius: 8px; font-weight: 900; font-size: 1rem; cursor: pointer; transition: 0.3s; letter-spacing: 2px; }
+        
+        @media (hover: hover) {
+            .btn-calc:hover { background: #fff; }
+        }
+        #bmi-result { margin-top: 20px; font-size: 1.1rem; font-weight: 700; color: var(--primary); text-align: center; line-height: 1.4; }
+
+        /* FİYATLANDIRMA */
+        .price-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px; }
+        .p-card { background: #0c0c0c; padding: 40px 20px; border-radius: 20px; border: 1px solid var(--border); position: relative; transition: 0.4s; text-align: center; }
+        
+        @media (hover: hover) {
+            .p-card:hover { border-color: var(--primary); }
+        }
+        .p-card .p-type { font-family: 'Syncopate'; font-size: 0.8rem; color: var(--primary); margin-bottom: 20px; display: block; letter-spacing: 3px; }
+        .p-card .p-val { font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 900; margin-bottom: 25px; line-height: 1; }
+        .p-card .p-val span { font-size: 1rem; color: var(--text-dim); }
+        .p-card ul { list-style: none; margin-bottom: 30px; text-align: left; padding: 0 10px; }
+        .p-card ul li { margin-bottom: 15px; color: var(--text-dim); display: flex; align-items: center; gap: 10px; font-size: 0.85rem; }
+        .p-card ul li i { color: var(--primary); font-size: 0.8rem; flex-shrink: 0; }
+        .btn-join { display: block; width: 100%; padding: 16px; background: var(--primary); color: #000; text-decoration: none; font-weight: 900; letter-spacing: 2px; border-radius: 8px; transition: 0.3s; font-size: 0.9rem; }
+        
+        @media (hover: hover) {
+            .btn-join:hover { background: #fff; transform: scale(1.02); }
+        }
+
+        /* SSS AKORDEON */
+        .faq-section { max-width: 900px; margin: 0 auto; width: 100%; }
+        .faq-item { background: var(--card-bg); margin-bottom: 15px; border-radius: 10px; border: 1px solid var(--border); overflow: hidden; transition: 0.3s; }
+        .faq-question { padding: 18px 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 600; letter-spacing: 1px; font-size: clamp(0.85rem, 2vw, 0.95rem); }
+        .faq-question span { padding-right: 15px; }
+        .faq-question i { color: var(--primary); transition: 0.3s; flex-shrink: 0; }
+        .faq-answer { padding: 0 20px; max-height: 0; overflow: hidden; transition: 0.4s ease; color: var(--text-dim); font-size: 0.9rem; }
+        .faq-item.active .faq-answer { padding-bottom: 20px; max-height: 300px; }
+        .faq-item.active .faq-question i { transform: rotate(180deg); }
+
+        /* FOOTER & MAP */
+        footer { padding: 60px 5% 30px; background: #000; width: 100%; overflow: hidden; }
+        .footer-content { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px; }
+        .footer-logo p { color: var(--text-dim); max-width: 400px; margin-top: 15px; font-size: 0.9rem; }
+        .footer-links h4 { font-family: 'Syncopate'; font-size: 0.8rem; color: var(--primary); margin-bottom: 20px; }
+        .map-container { max-width: 1400px; margin: 50px auto 0; border-radius: 20px; overflow: hidden; border: 1px solid var(--border); filter: grayscale(1) invert(0.92); transition: 0.5s; width: 100%; }
+        
+        @media (hover: hover) {
+            .map-container:hover { filter: grayscale(0.5) invert(0); }
+        }
+        .map-container iframe { display: block; width: 100%; height: clamp(250px, 40vw, 350px); border: 0; }
+        .footer-bottom { text-align: center; margin-top: 50px; padding-top: 20px; border-top: 1px solid var(--border); font-size: 0.8rem; color: var(--text-dim); }
+
+        /* === MOBİL UYUM (RESPONSIVE) KODLARI === */
+        @media (max-width: 1024px) { 
+            .footer-content { grid-template-columns: 1fr; text-align: center; } 
+            .footer-logo p { margin: 15px auto 0; }
+            .bmi-section { grid-template-columns: 1fr; text-align: center; } 
+            .bento-grid { grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(2, 250px); } 
+            .bento-1, .bento-2 { grid-column: span 2; } 
+            .bento-3, .bento-4 { grid-column: span 1; } 
+        }
+        
+        @media (max-width: 768px) { 
+            .hamburger { display: block; }
+            .nav-links { position: fixed; top: 0; right: -100%; height: 100vh; width: 100%; max-width: 400px; background: rgba(5, 5, 5, 0.98); backdrop-filter: blur(15px); flex-direction: column; justify-content: center; align-items: center; transition: 0.4s cubic-bezier(0.77, 0, 0.175, 1); z-index: 1001; border-left: 1px solid var(--border); }
+            .nav-links.active { right: 0; box-shadow: -10px 0 50px rgba(0,0,0,0.8); }
+            .nav-links a { font-size: 1.5rem; margin: 20px 0; display: block; }
+            .section-padding { padding: 50px 5%; }
+            .stats-container { margin: -30px 5% 40px; padding: 25px; grid-template-columns: 1fr; gap: 30px; border-radius: 15px; }
+            .bento-grid { grid-template-columns: 1fr; grid-template-rows: auto; gap: 12px; } 
+            .bento-1, .bento-2, .bento-3, .bento-4 { grid-column: span 1; height: 220px; } 
+            .cursor-dot, .cursor-outline { display: none !important; } 
+            
+            .wp-float, .ig-float { width: 50px; height: 50px; font-size: 24px; right: 15px; }
+            .wp-float { bottom: 130px; } 
+            .ig-float { bottom: 190px; }
+            
+            .bmi-section img { display: none; }
+        }
+
+        @media (max-width: 480px) {
+            .p-card { padding: 30px 15px; }
+            .f-card { padding: 30px 15px; }
+            .hero-content { padding: 0 10px; }
+        }
+
+        /* --- MENÜ AÇIKKEN KAYMAYI KİLİTLEME KODLARI --- */
+        html.menu-open, body.menu-open {
+            overflow: hidden !important;
+            touch-action: none !important; /* Safari/Chrome'da dokunmatik kaydırmayı kilitler */
+        }
+        
         body.menu-open .occ-card, 
-        /* Menü açıkken arka planın kaymasını kilitler */
-body.menu-open {
-    overflow: hidden !important;
-}
         body.menu-open .wp-float, 
         body.menu-open .ig-float {
             display: none !important;
         }
+    </style>
+</head>
+<body>
 
-        .bmi-section img { display: none; }
-    }
+    <div id="preloader">
+        <i class="fas fa-dumbbell"></i>
+        <h2>GYM OF LEGENDS</h2>
+    </div>
 
-            @media (max-width: 480px) {
-                .p-card { padding: 30px 15px; }
-                .f-card { padding: 30px 15px; }
-                .hero-content { padding: 0 10px; }
-            }
-            /* Bu kural CSS'in en altında olsun */
-body.menu-open .occ-card, 
-body.menu-open .wp-float, 
-body.menu-open .ig-float {
-    display: none !important;
-}
-        </style>
-    </head>
-    <body>
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
 
-        <div id="preloader">
-            <i class="fas fa-dumbbell"></i>
-            <h2>GYM OF LEGENDS</h2>
+    <a href="https://www.instagram.com/gymoflegendsserikk/" class="ig-float" target="_blank"><i class="fab fa-instagram"></i></a>
+    <a href="https://wa.me/905321361240?text=Merhaba,%20Gym%20of%20Legends%20salonunuz%20ve%20üyelikler%20hakkında%20bilgi%20almak%20istiyorum." class="wp-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
+
+    <div class="occ-card" id="occ-card">
+        <div class="occ-card-header">
+            <span class="occ-live-dot"></span>
+            <span class="occ-live-label">Salon Yoğunluğu</span>
         </div>
-
-        <div class="cursor-dot"></div>
-        <div class="cursor-outline"></div>
-
-        <a href="https://www.instagram.com/gymoflegendsserikk/" class="ig-float" target="_blank"><i class="fab fa-instagram"></i></a>
-        <a href="https://wa.me/905321361240?text=Merhaba,%20Gym%20of%20Legends%20salonunuz%20ve%20üyelikler%20hakkında%20bilgi%20almak%20istiyorum." class="wp-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
-
-        <!-- CANLI DURUM KARTI (HER ZAMAN GÖRÜNÜR, SOSYAL MEDYA İKONLARININ ÜSTÜNDE) -->
-        <div class="occ-card" id="occ-card">
-            <div class="occ-card-header">
-                <span class="occ-live-dot"></span>
-                <span class="occ-live-label">Salon Yoğunluğu</span>
-            </div>
-            <div class="occ-card-body">
-                <div class="occ-card-donut" id="occ-card-donut">
-                    <div class="occ-card-inner">
-                        <span id="occ-card-count">0</span>
-                    </div>
-                </div>
-                <div class="occ-card-legend">
-                    <div class="occ-legend-row"><span class="legend-dot legend-kadin"></span> Kadın <span class="occ-legend-value" id="occ-card-kadin">-</span></div>
-                    <div class="occ-legend-row"><span class="legend-dot legend-erkek"></span> Erkek <span class="occ-legend-value" id="occ-card-erkek">-</span></div>
+        <div class="occ-card-body">
+            <div class="occ-card-donut" id="occ-card-donut">
+                <div class="occ-card-inner">
+                    <span id="occ-card-count">0</span>
                 </div>
             </div>
+            <div class="occ-card-legend">
+                <div class="occ-legend-row"><span class="legend-dot legend-kadin"></span> Kadın <span class="occ-legend-value" id="occ-card-kadin">-</span></div>
+                <div class="occ-legend-row"><span class="legend-dot legend-erkek"></span> Erkek <span class="occ-legend-value" id="occ-card-erkek">-</span></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="scroll-progress"></div>
+
+    <header id="main-header">
+        <nav>
+            <div class="logo">GYM OF <span>LEGENDS</span></div>
+            <div class="hamburger" id="hamburger-btn"><i class="fas fa-bars"></i></div>
+            <div class="nav-links" id="nav-links">
+                <a href="#arena">SALON</a>
+                <a href="#pricing">ÜYELİK</a>
+                <a href="#kitle">VÜCUT KİTLE ENDEKSİ</a>
+                <a href="#faq">SIKÇA SORULANLAR</a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="hero">
+        <video autoplay loop muted playsinline class="hero-video" id="heroVideo">
+            <source src="video4.mp4" type="video/mp4">
+        </video>
+        <div class="hero-overlay"></div>
+        <div class="hero-content" data-aos="zoom-out" data-aos-duration="2000">
+            <div class="hero-sub">SERİK'İN ZİRVESİ</div>
+            <h1 class="matrix-text">GYM OF<br>LEGENDS</h1>
+        </div>
+    </div>
+
+    <div class="stats-container" data-aos="fade-up">
+        <div class="stat-item"><i class="fas fa-users"></i><h3>500+</h3><p>Aktif Üye</p></div>
+        <div class="stat-item"><i class="fas fa-dumbbell"></i><h3>Pro</h3><p>Kapsamlı Ekipman</p></div>
+        <div class="stat-item"><i class="fas fa-medal"></i><h3>2018</h3><p>Kuruluş Yılı</p></div>
+    </div>
+
+    <div class="marquee-container" data-aos="fade-up">
+        <div class="marquee-content">
+            <span>GYM OF LEGENDS <i class="fas fa-bolt"></i> NO EXCUSES <i class="fas fa-bolt"></i> TRAIN HARD <i class="fas fa-bolt"></i> SERİK'İN ZİRVESİ <i class="fas fa-bolt"></i></span>
+            <span>GYM OF LEGENDS <i class="fas fa-bolt"></i> NO EXCUSES <i class="fas fa-bolt"></i> TRAIN HARD <i class="fas fa-bolt"></i> SERİK'İN ZİRVESİ <i class="fas fa-bolt"></i></span>
+            <span>GYM OF LEGENDS <i class="fas fa-bolt"></i> NO EXCUSES <i class="fas fa-bolt"></i> TRAIN HARD <i class="fas fa-bolt"></i> SERİK'İN ZİRVESİ <i class="fas fa-bolt"></i></span>
+        </div>
+    </div>
+
+    <section id="arena" class="section-padding">
+        <div class="section-header" data-aos="fade-up">
+            <h2 class="matrix-text">SALONUMUZ</h2>
+            <div class="line"></div>
+        </div>
+        <div class="bento-grid">
+            <div class="bento-item bento-1" data-speed="0.05">
+                <img src="gym-of-legends.png" alt="Ana Salon">
+                <video muted loop playsinline class="hover-video">
+                    <source src="0307.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div class="bento-item bento-2" data-speed="0.1">
+                <img src="https://images.unsplash.com/photo-1540497077202-7c8a3999166f?q=80&w=2070" alt="Kardiyo">
+                <video muted loop playsinline class="hover-video">
+                    <source src="0307.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div class="bento-item bento-3" data-speed="0.03">
+                <img src="https://images.unsplash.com/photo-1571902943202-507ec2618e8f?q=80&w=1975" alt="Ağırlık">
+            </div>
+            <div class="bento-item bento-4" data-speed="0.07">
+                <img src="https://images.unsplash.com/photo-1593079831268-3381b0db4a77?q=80&w=2069" alt="Dinlenme">
+            </div>
+        </div>
+    </section>
+
+    <section class="section-padding features">
+        <div class="feature-grid">
+            <div class="f-card" data-aos="fade-up"><i class="fas fa-dumbbell"></i><h3>PRO EKİPMAN</h3><p>Serik'in en kapsamlı ağırlık parkuru.</p></div>
+            <div class="f-card" data-aos="fade-up" data-aos-delay="100"><i class="fas fa-bolt"></i><h3>HİJYEN</h3><p>Ferah alanlar ve günlük sterilize.</p></div>
+            <div class="f-card" data-aos="fade-up" data-aos-delay="200"><i class="fas fa-shield-halved"></i><h3>PRESTİJ</h3><p>Hedeflerine odaklanmış seçkin topluluk.</p></div>
+        </div>
+    </section>
+
+    <section id="kitle" class="section-padding">
+        <div class="section-header" data-aos="fade-up">
+            <h2 class="matrix-text">VÜCUT KİTLE İNDEKSİ</h2>
+            <div class="line"></div>
+        </div>
+        <div class="bmi-section" data-aos="fade-up">
+            <div>
+                <h3 style="font-family: 'Syncopate'; margin-bottom: 20px; font-size: clamp(1.2rem, 4vw, 1.5rem);">DURUMUNU ÖĞREN</h3>
+                <p style="color: var(--text-dim); margin-bottom: 25px;">Hedeflerine ulaşmak için ilk adımı at. Boyunu ve kilonu girerek mevcut durumunu hemen hesapla.</p>
+                <div class="bmi-box">
+                    <input type="number" id="height" class="bmi-input" placeholder="Boy (Örn: 180 cm)">
+                    <input type="number" id="weight" class="bmi-input" placeholder="Kilo (Örn: 80 kg)">
+                    <button class="btn-calc" onclick="calculateBMI()">HESAPLA</button>
+                    <div id="bmi-result"></div>
+                </div>
+            </div>
+            <div>
+                <img src="https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=2070" style="width: 100%; border-radius: 20px; border: 1px solid var(--border); filter: grayscale(0.5);" alt="BMI">
+            </div>
+        </div>
+    </section>
+
+    <section id="pricing" class="section-padding">
+        <div class="section-header" data-aos="fade-up">
+            <h2 class="matrix-text">ÜYELİK PAKETLERİ</h2>
+            <div class="line"></div>
         </div>
 
-        <div id="scroll-progress"></div>
+        <div class="price-grid">
+            <div class="p-card" data-aos="fade-up">
+                <span class="p-type" id="type-1">1 AYLIK</span>
+                <div class="p-val" id="price-1">2.500₺ <span id="span-1">/ Ay</span></div>
+                <ul><li><i class="fas fa-check"></i> Sınırsız Alan Kullanımı</li><li><i class="fas fa-check"></i> Duş & Soyunma Odası</li></ul>
+                <a href="https://wa.me/905321361240?text=1 aylık üyelik hakkında bilgi almak istiyorum." target="_blank" class="btn-join">ŞİMDİ KATIL</a>
+            </div>
+            <div class="p-card" data-aos="fade-up" data-aos-delay="100" style="border-color: var(--primary);">
+                <span class="p-type" id="type-2">2 AYLIK</span>
+                <div class="p-val" id="price-2">4.500₺ <span id="span-2">/ 2 Ay</span></div>
+                <ul><li><i class="fas fa-check"></i> Sınırsız Alan Kullanımı</li><li><i class="fas fa-check"></i> Duş & Soyunma Odası</li></ul>
+                <a href="https://wa.me/905321361240?text=2 aylık üyelik hakkında bilgi almak istiyorum." target="_blank" class="btn-join">ŞİMDİ KATIL</a>
+            </div>
+            <div class="p-card" data-aos="fade-up" data-aos-delay="200">
+                <span class="p-type" id="type-3">3 AYLIK</span>
+                <div class="p-val" id="price-3">6.500₺ <span id="span-3">/ 3 Ay</span></div>
+                <ul><li><i class="fas fa-check"></i> Sınırsız Alan Kullanımı</li><li><i class="fas fa-check"></i> Duş & Soyunma Odası</li></ul>
+                <a href="https://wa.me/905321361240?text=3 aylık üyelik hakkında bilgi almak istiyorum." target="_blank" class="btn-join">ŞİMDİ KATIL</a>
+            </div>
+        </div>
+    </section>
 
-        <header id="main-header">
-            <nav>
+    <section id="faq" class="section-padding">
+        <div class="section-header" data-aos="fade-up"><h2 class="matrix-text">SIKÇA SORULANLAR</h2><div class="line"></div></div>
+        <div class="faq-section" data-aos="fade-up">
+            <div class="faq-item"><div class="faq-question"><span>Salon çalışma saatleriniz nedir?</span><i class="fas fa-chevron-down"></i></div><div class="faq-answer"><br>Hafta içi 10:00 - 22:00, Cumartesi 10:00 - 20:00 saatleri arasındadır. Pazar günleri kapalıyız.</div></div>
+            <div class="faq-item"><div class="faq-question"><span>Ödeme seçenekleriniz nelerdir?</span><i class="fas fa-chevron-down"></i></div><div class="faq-answer"><br>Nakit, kredi kartı veya havale/EFT yöntemlerini tercih edebilirsiniz.</div></div>
+            <div class="faq-item"><div class="faq-question"><span>Özel ders veriyor musunuz?</span><i class="fas fa-chevron-down"></i></div><div class="faq-answer"><br>Evet, profesyonel antrenörlerimiz ile birebir özel ders (PT) programlarımız mevcuttur.</div></div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div>
                 <div class="logo">GYM OF <span>LEGENDS</span></div>
-                <div class="hamburger" id="hamburger-btn"><i class="fas fa-bars"></i></div>
-                <div class="nav-links" id="nav-links">
-                    <a href="#arena">SALON</a>
-                    <a href="#pricing">ÜYELİK</a>
-                    <a href="#kitle">VÜCUT KİTLE ENDEKSİ</a>
-                    <a href="#faq">SIKÇA SORULANLAR</a>
-                </div>
-            </nav>
-        </header>
-
-        <div class="hero">
-            <video autoplay loop muted playsinline class="hero-video" id="heroVideo">
-                <source src="video4.mp4" type="video/mp4">
-            </video>
-            <div class="hero-overlay"></div>
-            <div class="hero-content" data-aos="zoom-out" data-aos-duration="2000">
-                <div class="hero-sub">SERİK'İN ZİRVESİ</div>
-                <h1 class="matrix-text">GYM OF<br>LEGENDS</h1>
+                <p>Serik'in en kapsamlı salonunda efsanelerin arasında yerinizi alın.</p>
+            </div>
+            <div>
+                <h4>İLETİŞİM</h4>
+                <p style="color: var(--text-dim); margin-bottom: 10px;">Merkez Mah. Tuncer Paşa Cad. No:23<br>Serik / Antalya</p>
+                <p style="color: var(--text-dim);">Tel: 0532 136 12 40</p>
+            </div>
+            <div>
+                <h4>SAATLER</h4>
+                <p style="color: var(--text-dim);">H.İçi: 10:00 - 22:00<br>CMT: 10:00 - 20:00<br><span style="color: #ff4444;">Pazar: KAPALI</span></p>
             </div>
         </div>
-
-        <div class="stats-container" data-aos="fade-up">
-            <div class="stat-item"><i class="fas fa-users"></i><h3>500+</h3><p>Aktif Üye</p></div>
-            <div class="stat-item"><i class="fas fa-dumbbell"></i><h3>Pro</h3><p>Kapsamlı Ekipman</p></div>
-            <div class="stat-item"><i class="fas fa-medal"></i><h3>2018</h3><p>Kuruluş Yılı</p></div>
+        <div class="map-container" data-aos="fade-up">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3191.132338148785!2d31.1000000!3d36.9166667!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzbCsDU1JzAwLjAiTiAzMcKwMDYnMDAuMCJF!5e0!3m2!1str!2str!4v1625000000000!5m2!1str!2str" allowfullscreen="" loading="lazy"></iframe>
         </div>
-
-        <!-- TESİS YOĞUNLUĞU BÖLÜMÜ KALDIRILDI - Artık sağ alttaki yüzen buton/panel kullanılıyor -->
-
-        <div class="marquee-container" data-aos="fade-up">
-            <div class="marquee-content">
-                <span>GYM OF LEGENDS <i class="fas fa-bolt"></i> NO EXCUSES <i class="fas fa-bolt"></i> TRAIN HARD <i class="fas fa-bolt"></i> SERİK'İN ZİRVESİ <i class="fas fa-bolt"></i></span>
-                <span>GYM OF LEGENDS <i class="fas fa-bolt"></i> NO EXCUSES <i class="fas fa-bolt"></i> TRAIN HARD <i class="fas fa-bolt"></i> SERİK'İN ZİRVESİ <i class="fas fa-bolt"></i></span>
-                <span>GYM OF LEGENDS <i class="fas fa-bolt"></i> NO EXCUSES <i class="fas fa-bolt"></i> TRAIN HARD <i class="fas fa-bolt"></i> SERİK'İN ZİRVESİ <i class="fas fa-bolt"></i></span>
-            </div>
+        <div class="footer-bottom">
+            <div>© 2026 Gym of Legends.</div>
         </div>
+    </footer>
 
-        <section id="arena" class="section-padding">
-            <div class="section-header" data-aos="fade-up">
-                <h2 class="matrix-text">SALONUMUZ</h2>
-                <div class="line"></div>
-            </div>
-            <div class="bento-grid">
-                <div class="bento-item bento-1" data-speed="0.05">
-                    <img src="gym-of-legends.png" alt="Ana Salon">
-                    <video muted loop playsinline class="hover-video">
-                        <source src="0307.mp4" type="video/mp4">
-                    </video>
-                </div>
-                <div class="bento-item bento-2" data-speed="0.1">
-                    <img src="https://images.unsplash.com/photo-1540497077202-7c8a3999166f?q=80&w=2070" alt="Kardiyo">
-                    <video muted loop playsinline class="hover-video">
-                        <source src="0307.mp4" type="video/mp4">
-                    </video>
-                </div>
-                <div class="bento-item bento-3" data-speed="0.03">
-                    <img src="https://images.unsplash.com/photo-1571902943202-507ec2618e8f?q=80&w=1975" alt="Ağırlık">
-                </div>
-                <div class="bento-item bento-4" data-speed="0.07">
-                    <img src="https://images.unsplash.com/photo-1593079831268-3381b0db4a77?q=80&w=2069" alt="Dinlenme">
-                </div>
-            </div>
-        </section>
+    <div id="lightbox" class="lightbox">
+        <span class="close-lb" onclick="closeLightbox()">×</span>
+        <img class="lightbox-content" id="lightbox-img">
+    </div>
 
-        <section class="section-padding features">
-            <div class="feature-grid">
-                <div class="f-card" data-aos="fade-up"><i class="fas fa-dumbbell"></i><h3>PRO EKİPMAN</h3><p>Serik'in en kapsamlı ağırlık parkuru.</p></div>
-                <div class="f-card" data-aos="fade-up" data-aos-delay="100"><i class="fas fa-bolt"></i><h3>HİJYEN</h3><p>Ferah alanlar ve günlük sterilize.</p></div>
-                <div class="f-card" data-aos="fade-up" data-aos-delay="200"><i class="fas fa-shield-halved"></i><h3>PRESTİJ</h3><p>Hedeflerine odaklanmış seçkin topluluk.</p></div>
-            </div>
-        </section>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Animasyonlar
+        AOS.init({ duration: 1000, once: true });
 
-        <section id="kitle" class="section-padding">
-            <div class="section-header" data-aos="fade-up">
-                <h2 class="matrix-text">VÜCUT KİTLE İNDEKSİ</h2>
-                <div class="line"></div>
-            </div>
-            <div class="bmi-section" data-aos="fade-up">
-                <div>
-                    <h3 style="font-family: 'Syncopate'; margin-bottom: 20px; font-size: clamp(1.2rem, 4vw, 1.5rem);">DURUMUNU ÖĞREN</h3>
-                    <p style="color: var(--text-dim); margin-bottom: 25px;">Hedeflerine ulaşmak için ilk adımı at. Boyunu ve kilonu girerek mevcut durumunu hemen hesapla.</p>
-                    <div class="bmi-box">
-                        <input type="number" id="height" class="bmi-input" placeholder="Boy (Örn: 180 cm)">
-                        <input type="number" id="weight" class="bmi-input" placeholder="Kilo (Örn: 80 kg)">
-                        <button class="btn-calc" onclick="calculateBMI()">HESAPLA</button>
-                        <div id="bmi-result"></div>
-                    </div>
-                </div>
-                <div>
-                    <img src="https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=2070" style="width: 100%; border-radius: 20px; border: 1px solid var(--border); filter: grayscale(0.5);" alt="BMI">
-                </div>
-            </div>
-        </section>
+        // Yükleme Ekranı
+        window.addEventListener('load', () => {
+            const preloader = document.getElementById('preloader');
+            setTimeout(() => { preloader.style.opacity = '0'; preloader.style.visibility = 'hidden'; }, 800);
+        });
 
-        <section id="pricing" class="section-padding">
-            <div class="section-header" data-aos="fade-up">
-                <h2 class="matrix-text">ÜYELİK PAKETLERİ</h2>
-                <div class="line"></div>
-            </div>
+        // MOBİL MENÜ KONTROLÜ
+        const hamburgerBtn = document.getElementById('hamburger-btn');
+        const navLinks = document.getElementById('nav-links');
+        const hamburgerIcon = hamburgerBtn.querySelector('i');
 
-            <div class="price-grid">
-                <div class="p-card" data-aos="fade-up">
-                    <span class="p-type" id="type-1">1 AYLIK</span>
-                    <div class="p-val" id="price-1">2.500₺ <span id="span-1">/ Ay</span></div>
-                    <ul><li><i class="fas fa-check"></i> Sınırsız Alan Kullanımı</li><li><i class="fas fa-check"></i> Duş & Soyunma Odası</li></ul>
-                    <a href="https://wa.me/905321361240?text=1 aylık üyelik hakkında bilgi almak istiyorum." target="_blank" class="btn-join">ŞİMDİ KATIL</a>
-                </div>
-                <div class="p-card" data-aos="fade-up" data-aos-delay="100" style="border-color: var(--primary);">
-                    <span class="p-type" id="type-2">2 AYLIK</span>
-                    <div class="p-val" id="price-2">4.500₺ <span id="span-2">/ 2 Ay</span></div>
-                    <ul><li><i class="fas fa-check"></i> Sınırsız Alan Kullanımı</li><li><i class="fas fa-check"></i> Duş & Soyunma Odası</li></ul>
-                    <a href="https://wa.me/905321361240?text=2 aylık üyelik hakkında bilgi almak istiyorum." target="_blank" class="btn-join">ŞİMDİ KATIL</a>
-                </div>
-                <div class="p-card" data-aos="fade-up" data-aos-delay="200">
-                    <span class="p-type" id="type-3">3 AYLIK</span>
-                    <div class="p-val" id="price-3">6.500₺ <span id="span-3">/ 3 Ay</span></div>
-                    <ul><li><i class="fas fa-check"></i> Sınırsız Alan Kullanımı</li><li><i class="fas fa-check"></i> Duş & Soyunma Odası</li></ul>
-                    <a href="https://wa.me/905321361240?text=3 aylık üyelik hakkında bilgi almak istiyorum." target="_blank" class="btn-join">ŞİMDİ KATIL</a>
-                </div>
-            </div>
-        </section>
-
-        <section id="faq" class="section-padding">
-            <div class="section-header" data-aos="fade-up"><h2 class="matrix-text">SIKÇA SORULANLAR</h2><div class="line"></div></div>
-            <div class="faq-section" data-aos="fade-up">
-                <div class="faq-item"><div class="faq-question"><span>Salon çalışma saatleriniz nedir?</span><i class="fas fa-chevron-down"></i></div><div class="faq-answer"><br>Hafta içi 10:00 - 22:00, Cumartesi 10:00 - 20:00 saatleri arasındadır. Pazar günleri kapalıyız.</div></div>
-                <div class="faq-item"><div class="faq-question"><span>Ödeme seçenekleriniz nelerdir?</span><i class="fas fa-chevron-down"></i></div><div class="faq-answer"><br>Nakit, kredi kartı veya havale/EFT yöntemlerini tercih edebilirsiniz.</div></div>
-                <div class="faq-item"><div class="faq-question"><span>Özel ders veriyor musunuz?</span><i class="fas fa-chevron-down"></i></div><div class="faq-answer"><br>Evet, profesyonel antrenörlerimiz ile birebir özel ders (PT) programlarımız mevcuttur.</div></div>
-            </div>
-        </section>
-
-        <footer>
-            <div class="footer-content">
-                <div>
-                    <div class="logo">GYM OF <span>LEGENDS</span></div>
-                    <p>Serik'in en kapsamlı salonunda efsanelerin arasında yerinizi alın.</p>
-                </div>
-                <div>
-                    <h4>İLETİŞİM</h4>
-                    <p style="color: var(--text-dim); margin-bottom: 10px;">Merkez Mah. Tuncer Paşa Cad. No:23<br>Serik / Antalya</p>
-                    <p style="color: var(--text-dim);">Tel: 0532 136 12 40</p>
-                </div>
-                <div>
-                    <h4>SAATLER</h4>
-                    <p style="color: var(--text-dim);">H.İçi: 10:00 - 22:00<br>CMT: 10:00 - 20:00<br><span style="color: #ff4444;">Pazar: KAPALI</span></p>
-                </div>
-            </div>
-            <div class="map-container" data-aos="fade-up">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3191.132338148785!2d31.1000000!3d36.9166667!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzbCsDU1JzAwLjAiTiAzMcKwMDYnMDAuMCJF!5e0!3m2!1str!2str!4v1625000000000!5m2!1str!2str" allowfullscreen="" loading="lazy"></iframe>
-            </div>
-            <div class="footer-bottom">
-                <div>© 2026 Gym of Legends.</div>
-            </div>
-        </footer>
-
-        <div id="lightbox" class="lightbox">
-            <span class="close-lb" onclick="closeLightbox()">×</span>
-            <img class="lightbox-content" id="lightbox-img">
-        </div>
-
-        <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-        <script>
-            // Animasyonlar
-            AOS.init({ duration: 1000, once: true });
-
-            // Yükleme Ekranı
-            window.addEventListener('load', () => {
-                const preloader = document.getElementById('preloader');
-                setTimeout(() => { preloader.style.opacity = '0'; preloader.style.visibility = 'hidden'; }, 800);
+        function toggleMenu() {
+            navLinks.classList.toggle('active');
+            
+            const isOpen = navLinks.classList.contains('active');
+            
+            // Hem body hem html etiketine class ekliyoruz (Safari sorunları için)
+            document.body.classList.toggle('menu-open', isOpen);
+            document.documentElement.classList.toggle('menu-open', isOpen);
+            
+            const elementsToHide = document.querySelectorAll('.occ-card, .wp-float, .ig-float');
+            elementsToHide.forEach(el => {
+                el.style.display = isOpen ? 'none' : '';
             });
 
-            // MOBİL MENÜ KONTROLÜ
-    const hamburgerBtn = document.getElementById('hamburger-btn');
-    const navLinks = document.getElementById('nav-links');
-    const hamburgerIcon = hamburgerBtn.querySelector('i');
-
-    function toggleMenu() {
-        navLinks.classList.toggle('active');
-        
-        // 1. Menü durumunu belirle
-        const isOpen = navLinks.classList.contains('active');
-        
-        // 2. Body'ye sınıf ekle/kaldır (CSS kontrolü için)
-        document.body.classList.toggle('menu-open', isOpen);
-        
-        // 3. Öğeleri JS ile doğrudan gizle (CSS başarısız olursa diye sigorta)
-        const elementsToHide = document.querySelectorAll('.occ-card, .wp-float, .ig-float');
-        elementsToHide.forEach(el => {
-            el.style.display = isOpen ? 'none' : '';
-        });
-
-        // 4. Hamburger ikon animasyonu
-        if(isOpen) {
-            hamburgerIcon.classList.remove('fa-bars');
-            hamburgerIcon.classList.add('fa-times');
-            hamburgerBtn.style.transform = 'rotate(90deg)'; 
-        } else {
-            hamburgerIcon.classList.remove('fa-times');
-            hamburgerIcon.classList.add('fa-bars');
-            hamburgerBtn.style.transform = 'rotate(0deg)'; 
+            if(isOpen) {
+                hamburgerIcon.classList.remove('fa-bars');
+                hamburgerIcon.classList.add('fa-times');
+                hamburgerBtn.style.transform = 'rotate(90deg)'; 
+            } else {
+                hamburgerIcon.classList.remove('fa-times');
+                hamburgerIcon.classList.add('fa-bars');
+                hamburgerBtn.style.transform = 'rotate(0deg)'; 
+            }
         }
-    }
 
-    hamburgerBtn.addEventListener('click', toggleMenu);
+        hamburgerBtn.addEventListener('click', toggleMenu);
 
-    // Menü linklerine tıklandığında menü kapansın (Burayı da güncellemen önemli)
-    document.querySelectorAll('.nav-links a').forEach(link => {
-        link.addEventListener('click', () => { 
-            navLinks.classList.remove('active'); 
-            
-            // BURASI EKLENDİ: Menü kapanınca body'deki class'ı siler
-            document.body.classList.remove('menu-open'); 
-            
-            hamburgerIcon.classList.remove('fa-times');
-            hamburgerIcon.classList.add('fa-bars');
-            hamburgerBtn.style.transform = 'rotate(0deg)';
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => { 
+                navLinks.classList.remove('active'); 
+                
+                // Menü kapandığında body ve html etiketinden class silinir
+                document.body.classList.remove('menu-open'); 
+                document.documentElement.classList.remove('menu-open'); 
+                
+                hamburgerIcon.classList.remove('fa-times');
+                hamburgerIcon.classList.add('fa-bars');
+                hamburgerBtn.style.transform = 'rotate(0deg)';
+            });
         });
-    });
 
-            hamburgerBtn.addEventListener('click', toggleMenu);
+        // MATRIX (SCRAMBLE) METİN EFEKTİ
+        const scrambleChars = '!<>-_\\\\/[]{}—=+*^?#________';
+        const scrambleElements = document.querySelectorAll('.matrix-text');
+        
+        const scrambleObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !entry.target.dataset.scrambled) {
+                    entry.target.dataset.scrambled = true; 
+                    const originalText = entry.target.innerHTML;
+                    if(!originalText.includes('<')) {
+                        let iterations = 0;
+                        const interval = setInterval(() => {
+                            entry.target.innerText = originalText.split('').map((letter, index) => {
+                                if (letter === ' ') return ' ';
+                                if (index < iterations) return originalText[index];
+                                return scrambleChars[Math.floor(Math.random() * scrambleChars.length)];
+                            }).join('');
+                            if (iterations >= originalText.length) clearInterval(interval);
+                            iterations += 1/3; 
+                        }, 30);
+                    }
+                }
+            });
+        }, { threshold: 0.5 });
+        scrambleElements.forEach(el => scrambleObserver.observe(el));
+
+        // Özel İmleç
+        if (window.matchMedia("(pointer: fine)").matches) {
+            const cursorDot = document.querySelector('.cursor-dot');
+            const cursorOutline = document.querySelector('.cursor-outline');
             
-            document.querySelectorAll('.nav-links a').forEach(link => {
-                link.addEventListener('click', () => { 
-                    navLinks.classList.remove('active'); 
-                    hamburgerIcon.classList.remove('fa-times');
-                    hamburgerIcon.classList.add('fa-bars');
-                    hamburgerBtn.style.transform = 'rotate(0deg)';
+            window.addEventListener('mousemove', (e) => {
+                const posX = e.clientX; const posY = e.clientY;
+                cursorDot.style.left = `${posX}px`; cursorDot.style.top = `${posY}px`;
+                cursorOutline.animate({ left: `${posX}px`, top: `${posY}px` }, { duration: 500, fill: "forwards" });
+            });
+
+            document.querySelectorAll('a, button, input, .faq-question, .bento-item, .close-lb, .hamburger').forEach(el => {
+                el.addEventListener('mouseenter', () => {
+                    cursorOutline.style.width = '60px'; cursorOutline.style.height = '60px';
+                    cursorOutline.style.backgroundColor = 'rgba(255, 102, 0, 0.1)';
+                });
+                el.addEventListener('mouseleave', () => {
+                    cursorOutline.style.width = '40px'; cursorOutline.style.height = '40px';
+                    cursorOutline.style.backgroundColor = 'transparent';
                 });
             });
+        }
 
-            // MATRIX (SCRAMBLE) METİN EFEKTİ
-            const scrambleChars = '!<>-_\\\\/[]{}—=+*^?#________';
-            const scrambleElements = document.querySelectorAll('.matrix-text');
+        // Header, Scroll Bar ve Paralaks Efekti
+        const heroVideo = document.getElementById('heroVideo');
+        const bentoItems = document.querySelectorAll('.bento-item');
+
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('main-header');
+            const scrollBar = document.getElementById('scroll-progress');
+            if (window.scrollY > 50) header.classList.add('scrolled');
+            else header.classList.remove('scrolled');
             
-            const scrambleObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting && !entry.target.dataset.scrambled) {
-                        entry.target.dataset.scrambled = true; 
-                        const originalText = entry.target.innerHTML;
-                        if(!originalText.includes('<')) {
-                            let iterations = 0;
-                            const interval = setInterval(() => {
-                                entry.target.innerText = originalText.split('').map((letter, index) => {
-                                    if (letter === ' ') return ' ';
-                                    if (index < iterations) return originalText[index];
-                                    return scrambleChars[Math.floor(Math.random() * scrambleChars.length)];
-                                }).join('');
-                                if (iterations >= originalText.length) clearInterval(interval);
-                                iterations += 1/3; 
-                            }, 30);
-                        }
+            let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            scrollBar.style.width = (winScroll / height) * 100 + "%";
+
+            let scrollY = window.scrollY;
+            if (scrollY < window.innerHeight && window.innerWidth > 768) { 
+                heroVideo.style.transform = `translateY(${scrollY * 0.4}px)`; 
+            }
+            
+            if (window.innerWidth > 768) {
+                bentoItems.forEach(item => {
+                    let speed = item.getAttribute('data-speed');
+                    if(speed) { item.style.transform = `translateY(${scrollY * speed - 50}px)`; }
+                });
+            } else {
+                bentoItems.forEach(item => item.style.transform = 'none');
+            }
+        });
+
+        // BENTO GRID
+        bentoItems.forEach(item => {
+            const video = item.querySelector('.hover-video');
+            const img = item.querySelector('img');
+            
+            if(video && window.matchMedia("(hover: hover)").matches) {
+                item.addEventListener('mouseenter', () => video.play());
+                item.addEventListener('mouseleave', () => { video.pause(); video.currentTime = 0; });
+            }
+            
+            item.addEventListener('click', () => {
+                if(img) openLightbox(img.src);
+            });
+        });
+
+        // BMI Hesaplayıcı
+        function calculateBMI() {
+            let h = document.getElementById('height').value;
+            let w = document.getElementById('weight').value;
+            let resultDiv = document.getElementById('bmi-result');
+            if(h > 0 && w > 0) {
+                let bmi = (w / ((h/100)*(h/100))).toFixed(1);
+                let durum = "Normal"; let renk = "#25d366";
+                if(bmi < 18.5) { durum = "Zayıf"; renk = "#f09433"; }
+                else if(bmi >= 25 && bmi < 30) { durum = "Fazla Kilolu"; renk = "#f09433"; }
+                else if(bmi >= 30) { durum = "Obezite"; renk = "#ff4444"; }
+                resultDiv.innerHTML = `BMI: ${bmi} <br><span style="font-size:1rem; color:${renk};">${durum}</span>`;
+                resultDiv.style.color = "#fff";
+            } else {
+                resultDiv.innerHTML = "<span style='font-size:1rem; color:#ff4444;'>Lütfen boy ve kilo girin.</span>";
+            }
+        }
+
+        // SSS Akordeon
+        const faqItems = document.querySelectorAll('.faq-item');
+        faqItems.forEach(item => {
+            const question = item.querySelector('.faq-question');
+            question.addEventListener('click', () => {
+                const isActive = item.classList.contains('active');
+                faqItems.forEach(i => i.classList.remove('active'));
+                if (!isActive) item.classList.add('active');
+            });
+        });
+
+        // Lightbox
+        function openLightbox(src) { document.getElementById('lightbox').style.display = "block"; document.getElementById('lightbox-img').src = src; }
+        function closeLightbox() { document.getElementById('lightbox').style.display = "none"; }
+
+        // --- SALON YOĞUNLUĞU KONTROLÜ ---
+        const GYM_TEKNO_API_URL = "https://api.gymteknonetwork.com/api/gymoflegends06/geciskontrol/son-gecisler?branch=";
+        const SESSION_TOKEN = "ItADhW1EIh:session:GymTekno-9e6d7c1e-85db-4557-9e0b-080440eb8df3";
+
+        function paintDonut(el, total, kadin, erkek) {
+            if (total > 0 && kadin > 0 && erkek > 0) {
+                let kadinYuzde = (kadin / total) * 100;
+                el.style.background = `conic-gradient(#e91e63 0% ${kadinYuzde}%, #2196f3 ${kadinYuzde}% 100%)`;
+            } else if (total > 0 && kadin > 0) {
+                el.style.background = `conic-gradient(#e91e63 100%, #222 0)`;
+            } else if (total > 0 && erkek > 0) {
+                el.style.background = `conic-gradient(#2196f3 100%, #222 0)`;
+            } else {
+                el.style.background = `#222`;
+            }
+        }
+
+        function updateDonutChart(total, kadin, erkek) {
+            const cardCountEl = document.getElementById('occ-card-count');
+            const cardKadinEl = document.getElementById('occ-card-kadin');
+            const cardErkekEl = document.getElementById('occ-card-erkek');
+
+            if (total === 0) {
+                cardCountEl.innerText = '0';
+            } else {
+                let current = 0;
+                let step = Math.ceil(total / 20) || 1;
+                let timer = setInterval(() => {
+                    current += step;
+                    if (current >= total) {
+                        current = total;
+                        clearInterval(timer);
+                    }
+                    cardCountEl.innerText = current;
+                }, 40);
+            }
+
+            paintDonut(document.getElementById('occ-card-donut'), total, kadin, erkek);
+
+            cardKadinEl.innerText = kadin > 0 ? kadin : '-';
+            cardErkekEl.innerText = erkek > 0 ? erkek : '-';
+        }
+
+        async function fetchOccupancyData() {
+            try {
+                const response = await fetch(GYM_TEKNO_API_URL + '&_=' + Date.now(), {
+                    method: 'GET',
+                    cache: 'no-store',
+                    headers: {
+                        'x-api-session-token': SESSION_TOKEN,
+                        'Content-Type': 'application/json'
                     }
                 });
-            }, { threshold: 0.5 });
-            scrambleElements.forEach(el => scrambleObserver.observe(el));
 
-            // Özel İmleç
-            if (window.matchMedia("(pointer: fine)").matches) {
-                const cursorDot = document.querySelector('.cursor-dot');
-                const cursorOutline = document.querySelector('.cursor-outline');
-                
-                window.addEventListener('mousemove', (e) => {
-                    const posX = e.clientX; const posY = e.clientY;
-                    cursorDot.style.left = `${posX}px`; cursorDot.style.top = `${posY}px`;
-                    cursorOutline.animate({ left: `${posX}px`, top: `${posY}px` }, { duration: 500, fill: "forwards" });
-                });
+                if (!response.ok) throw new Error("API Hatası");
 
-                document.querySelectorAll('a, button, input, .faq-question, .bento-item, .close-lb, .hamburger').forEach(el => {
-                    el.addEventListener('mouseenter', () => {
-                        cursorOutline.style.width = '60px'; cursorOutline.style.height = '60px';
-                        cursorOutline.style.backgroundColor = 'rgba(255, 102, 0, 0.1)';
-                    });
-                    el.addEventListener('mouseleave', () => {
-                        cursorOutline.style.width = '40px'; cursorOutline.style.height = '40px';
-                        cursorOutline.style.backgroundColor = 'transparent';
-                    });
-                });
+                const data = await response.json();
+                const yogunluk = data && data.result && data.result.tesisYogunluk;
+
+                if (!yogunluk) throw new Error("tesisYogunluk alanı bulunamadı");
+
+                const kadin = Number(yogunluk.female_count) || 0;
+                const erkek = Number(yogunluk.male_count) || 0;
+                const apiTotal = Number(yogunluk.total_inside) || 0;
+                const total = (apiTotal === kadin + erkek) ? apiTotal : (kadin + erkek);
+
+                updateDonutChart(total, kadin, erkek);
+
+            } catch (error) {
+                console.error("Veri çekilemedi:", error);
+                document.getElementById('occ-card-count').innerText = "?";
             }
+        }
 
-            // Header, Scroll Bar ve Paralaks Efekti
-            const heroVideo = document.getElementById('heroVideo');
-            const bentoItems = document.querySelectorAll('.bento-item');
-
-            window.addEventListener('scroll', () => {
-                const header = document.getElementById('main-header');
-                const scrollBar = document.getElementById('scroll-progress');
-                if (window.scrollY > 50) header.classList.add('scrolled');
-                else header.classList.remove('scrolled');
-                
-                let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-                let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-                scrollBar.style.width = (winScroll / height) * 100 + "%";
-
-                let scrollY = window.scrollY;
-                if (scrollY < window.innerHeight && window.innerWidth > 768) { 
-                    heroVideo.style.transform = `translateY(${scrollY * 0.4}px)`; 
-                }
-                
-                if (window.innerWidth > 768) {
-                    bentoItems.forEach(item => {
-                        let speed = item.getAttribute('data-speed');
-                        if(speed) { item.style.transform = `translateY(${scrollY * speed - 50}px)`; }
-                    });
-                } else {
-                    bentoItems.forEach(item => item.style.transform = 'none');
-                }
-            });
-
-            // BENTO GRID
-            bentoItems.forEach(item => {
-                const video = item.querySelector('.hover-video');
-                const img = item.querySelector('img');
-                
-                if(video && window.matchMedia("(hover: hover)").matches) {
-                    item.addEventListener('mouseenter', () => video.play());
-                    item.addEventListener('mouseleave', () => { video.pause(); video.currentTime = 0; });
-                }
-                
-                item.addEventListener('click', () => {
-                    if(img) openLightbox(img.src);
-                });
-            });
-
-            // BMI Hesaplayıcı
-            function calculateBMI() {
-                let h = document.getElementById('height').value;
-                let w = document.getElementById('weight').value;
-                let resultDiv = document.getElementById('bmi-result');
-                if(h > 0 && w > 0) {
-                    let bmi = (w / ((h/100)*(h/100))).toFixed(1);
-                    let durum = "Normal"; let renk = "#25d366";
-                    if(bmi < 18.5) { durum = "Zayıf"; renk = "#f09433"; }
-                    else if(bmi >= 25 && bmi < 30) { durum = "Fazla Kilolu"; renk = "#f09433"; }
-                    else if(bmi >= 30) { durum = "Obezite"; renk = "#ff4444"; }
-                    resultDiv.innerHTML = `BMI: ${bmi} <br><span style="font-size:1rem; color:${renk};">${durum}</span>`;
-                    resultDiv.style.color = "#fff";
-                } else {
-                    resultDiv.innerHTML = "<span style='font-size:1rem; color:#ff4444;'>Lütfen boy ve kilo girin.</span>";
-                }
-            }
-
-            // SSS Akordeon
-            const faqItems = document.querySelectorAll('.faq-item');
-            faqItems.forEach(item => {
-                const question = item.querySelector('.faq-question');
-                question.addEventListener('click', () => {
-                    const isActive = item.classList.contains('active');
-                    faqItems.forEach(i => i.classList.remove('active'));
-                    if (!isActive) item.classList.add('active');
-                });
-            });
-
-            // Lightbox
-            function openLightbox(src) { document.getElementById('lightbox').style.display = "block"; document.getElementById('lightbox-img').src = src; }
-            function closeLightbox() { document.getElementById('lightbox').style.display = "none"; }
-
-            // --- SALON YOĞUNLUĞU KONTROLÜ (GERÇEK ANLIK VERİ) ---
-            // NOT: Bu, panelin kendisinin kullandığı GERÇEK "şu an içeride" endpoint'i.
-            // Eski v1-migration/gecis-yogunluk-analiz endpoint'i "günlük/saatlik giriş
-            // istatistiği" veriyordu, anlık doluluk değil — bu yüzden yanlış sayı gösteriyordu.
-            const GYM_TEKNO_API_URL = "https://api.gymteknonetwork.com/api/gymoflegends06/geciskontrol/son-gecisler?branch=";
-            const SESSION_TOKEN = "ItADhW1EIh:session:GymTekno-9e6d7c1e-85db-4557-9e0b-080440eb8df3";
-
-            function paintDonut(el, total, kadin, erkek) {
-                if (total > 0 && kadin > 0 && erkek > 0) {
-                    let kadinYuzde = (kadin / total) * 100;
-                    el.style.background = `conic-gradient(#e91e63 0% ${kadinYuzde}%, #2196f3 ${kadinYuzde}% 100%)`;
-                } else if (total > 0 && kadin > 0) {
-                    el.style.background = `conic-gradient(#e91e63 100%, #222 0)`;
-                } else if (total > 0 && erkek > 0) {
-                    el.style.background = `conic-gradient(#2196f3 100%, #222 0)`;
-                } else {
-                    el.style.background = `#222`;
-                }
-            }
-
-            function updateDonutChart(total, kadin, erkek) {
-                const cardCountEl = document.getElementById('occ-card-count');
-                const cardKadinEl = document.getElementById('occ-card-kadin');
-                const cardErkekEl = document.getElementById('occ-card-erkek');
-
-                // Ortadaki sayı animasyonu
-                if (total === 0) {
-                    cardCountEl.innerText = '0';
-                } else {
-                    let current = 0;
-                    let step = Math.ceil(total / 20) || 1;
-                    let timer = setInterval(() => {
-                        current += step;
-                        if (current >= total) {
-                            current = total;
-                            clearInterval(timer);
-                        }
-                        cardCountEl.innerText = current;
-                    }, 40);
-                }
-
-                paintDonut(document.getElementById('occ-card-donut'), total, kadin, erkek);
-
-                // Kadın/Erkek sayısı 0 ise "-" göster (ekran görüntüsündeki gibi)
-                cardKadinEl.innerText = kadin > 0 ? kadin : '-';
-                cardErkekEl.innerText = erkek > 0 ? erkek : '-';
-            }
-
-            async function fetchOccupancyData() {
-                try {
-                    const response = await fetch(GYM_TEKNO_API_URL + '&_=' + Date.now(), {
-                        method: 'GET',
-                        cache: 'no-store',
-                        headers: {
-                            'x-api-session-token': SESSION_TOKEN,
-                            'Content-Type': 'application/json'
-                        }
-                    });
-
-                    if (!response.ok) throw new Error("API Hatası");
-
-                    const data = await response.json();
-
-                    // Gerçek anlık doluluk verisi burada: result.tesisYogunluk
-                    const yogunluk = data && data.result && data.result.tesisYogunluk;
-
-                    if (!yogunluk) throw new Error("tesisYogunluk alanı bulunamadı");
-
-                    const kadin = Number(yogunluk.female_count) || 0;
-                    const erkek = Number(yogunluk.male_count) || 0;
-                    // total_inside'a da güveniyoruz ama kadın+erkek ile tutarlılık için
-                    // ikisini karşılaştırıp, tutmuyorsa kadın+erkek toplamını esas alıyoruz.
-                    const apiTotal = Number(yogunluk.total_inside) || 0;
-                    const total = (apiTotal === kadin + erkek) ? apiTotal : (kadin + erkek);
-
-                    // Grafiği çizdir
-                    updateDonutChart(total, kadin, erkek);
-
-                } catch (error) {
-                    console.error("Veri çekilemedi:", error);
-                    document.getElementById('occ-card-count').innerText = "?";
-                }
-            }
-
-            window.addEventListener('load', () => {
-                setTimeout(() => {
-                    fetchOccupancyData(); 
-                    setInterval(fetchOccupancyData, 20000); 
-                }, 1000);
-            });
-        </script>
-    </body>
-    </html>
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                fetchOccupancyData(); 
+                setInterval(fetchOccupancyData, 20000); 
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
