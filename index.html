@@ -124,22 +124,20 @@
         .occ-legend-row .occ-legend-value { color: #fff; font-weight: 700; margin-left: auto; padding-left: 10px; }
 
        @media (max-width: 480px) {
-    /* Mevcut kart ayarların */
-    .occ-card { right: 15px; bottom: 15px; } 
-    .occ-card-body { gap: 12px; }
-    .occ-card-donut { width: 50px; height: 50px; }
-    .occ-card-inner { width: 36px; height: 36px; }
-    #occ-card-count { font-size: 1.05rem; }
-    .occ-live-label { font-size: 0.6rem !important; }
-    .occ-legend-row { font-size: 0.75rem; }
+    /* Kartı en aşağıya sabitle */
+    .occ-card { 
+        right: 10px; 
+        bottom: 10px; 
+        width: calc(100% - 20px); /* Ekran genişliğine göre ayarla */
+    }
 
-    /* İkonları kartın üzerine taşıyan yeni kodlar */
+    /* İkonları kartın üzerine, aralarında boşluk bırakarak yerleştir */
     .wp-float { 
-        bottom: 135px; /* Kartın yüksekliğine göre ayarlandı */
+        bottom: 150px !important; /* Kartın yüksekliğinden daha yukarı */
         right: 15px; 
     }
     .ig-float { 
-        bottom: 195px; /* WhatsApp'ın üzerine */
+        bottom: 220px !important; /* WP'nin de üzerine */
         right: 15px; 
     }
 }
