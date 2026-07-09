@@ -29,7 +29,7 @@
             scroll-behavior: smooth; 
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
+        * { margin: 0; padding: 0; box-sizing: border-box; outline: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
         
         /* ÖZEL KAYDIRMA ÇUBUĞU */
         ::-webkit-scrollbar { width: 8px; }
@@ -37,16 +37,7 @@
         ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: #fff; }
 
-        /* ÖZEL İMLEÇ (Sadece Masaüstü) */
-        @media (min-width: 768px) {
-            body { cursor: none; }
-            a, button, input, .bento-item, .faq-question, .close-lb, .hamburger, #scrollToTopBtn, .wp-float, .wa-option, .close-wa, .close-announcement, .f-card, .p-card { cursor: none; }
-        }
-        
         body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--text-main); line-height: 1.6; }
-
-        .cursor-dot { width: 8px; height: 8px; background-color: var(--primary); position: fixed; border-radius: 50%; pointer-events: none; z-index: 999999; transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s, background-color 0.2s; }
-        .cursor-outline { width: 40px; height: 40px; border: 2px solid var(--primary-glow); position: fixed; border-radius: 50%; pointer-events: none; z-index: 999998; transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s, background-color 0.2s, border-color 0.2s; }
         
         /* YÜKLEME EKRANI */
         #preloader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 99999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.8s ease, visibility 0.8s ease; }
@@ -277,7 +268,6 @@
             .stats-container { margin: -30px 5% 40px; padding: 25px; grid-template-columns: 1fr; gap: 30px; border-radius: 15px; }
             .bento-grid { grid-template-columns: 1fr; grid-template-rows: auto; gap: 12px; } 
             .bento-1, .bento-2, .bento-3, .bento-4 { grid-column: span 1; height: 220px; } 
-            .cursor-dot, .cursor-outline { display: none !important; } 
             .bmi-section img { display: none; }
         }
 
@@ -303,10 +293,7 @@
         <h2>GYM OF LEGENDS</h2>
     </div>
 
-    <div class="cursor-dot"></div>
-    <div class="cursor-outline"></div>
-
-    <div id="announcement-bar" class="announcement-bar">
+    <div id="announcement-bar" class="announcement-bar"
         <p><i class="fas fa-bolt"></i> <span><strong>YAZ KAMPANYASI:</strong> 3 Aylık Üyeliklerde Ekstra 15 Gün Bizden!</span> <i class="fas fa-bolt"></i></p>
         <span class="close-announcement" onclick="closeAnnouncement()"><i class="fas fa-times"></i></span>
     </div>
@@ -572,6 +559,9 @@
                 hamburgerIcon.classList.remove('fa-times');
                 hamburgerIcon.classList.add('fa-bars');
                 hamburgerBtn.style.transform = 'rotate(0deg)';
+
+                const elementsToShow = document.querySelectorAll('.occ-card, .wp-float, .ig-float, #scrollToTopBtn, .wa-popup, .announcement-bar');
+                elementsToShow.forEach(el => { el.style.display = ''; });
             });
         });
 
@@ -616,29 +606,6 @@
             });
         }, { threshold: 0.5 });
         scrambleElements.forEach(el => scrambleObserver.observe(el));
-
-        // ÖZEL İMLEÇ
-        if (window.matchMedia("(pointer: fine)").matches) {
-            const cursorDot = document.querySelector('.cursor-dot');
-            const cursorOutline = document.querySelector('.cursor-outline');
-            
-            window.addEventListener('mousemove', (e) => {
-                const posX = e.clientX; const posY = e.clientY;
-                cursorDot.style.left = `${posX}px`; cursorDot.style.top = `${posY}px`;
-                cursorOutline.animate({ left: `${posX}px`, top: `${posY}px` }, { duration: 500, fill: "forwards" });
-            });
-
-            document.querySelectorAll('a, button, input, .faq-question, .bento-item, .close-lb, .hamburger, .wp-float, .wa-option, .close-wa, .close-announcement, .tilt-card').forEach(el => {
-                el.addEventListener('mouseenter', () => {
-                    cursorOutline.style.width = '60px'; cursorOutline.style.height = '60px';
-                    cursorOutline.style.backgroundColor = 'rgba(255, 102, 0, 0.1)';
-                });
-                el.addEventListener('mouseleave', () => {
-                    cursorOutline.style.width = '40px'; cursorOutline.style.height = '40px';
-                    cursorOutline.style.backgroundColor = 'transparent';
-                });
-            });
-        }
 
         // HEADER, PARALAKS VE BENTO GRID
         const heroVideo = document.getElementById('heroVideo');
